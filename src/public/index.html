@@ -3,84 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutor de C - Cliente</title>
+    <title>Tutor Inteligente de C</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Fira+Code&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .font-mono { font-family: 'Fira Code', monospace; }
+        .tab-button.tab-active { background-color: #6d28d9; color: white; }
+        .view { display: none; }
+        .view-active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .lepees-label { background-color: #ede9fe; color: #5b21b6; font-weight: 800; border-radius: 9999px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.25rem; }
     </style>
 </head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Tutor Inteligente de C</h1>
-        <div class="space-y-6">
-            <div>
-                <label for="exercise-input" class="block font-bold text-gray-700 mb-2">📝 Enunciado:</label>
-                <textarea id="exercise-input" placeholder="Cole o enunciado do exercício..." class="w-full h-28 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500"></textarea>
+<body class="p-4 sm:p-6 md:p-8">
+    <div id="app" class="max-w-6xl mx-auto">
+        <!-- HEADER -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+             <div class="flex items-center gap-4 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-violet-600"><path d="M15 14c.2-1 .7-1.7 1.5-2.5C17.3 10.7 18 9.9 18 9c0-.9-.4-1.8-1-2.4c-.9-.8-2-1.3-3.3-1.5c-.5-.1-.9.4-.8.9c.1.4.5.7.9.8c.8.2 1.5.6 2.1 1.2c.4.4.6 1 .6 1.6c0 .5-.2 1-.8 1.5c-.7.6-1.2 1.2-1.4 2.2c-.2.7.3 1.3.9 1.3h.2c.8 0 1.2-.8 1-1.5z"/><path d="M9 14c-.2-1-.7-1.7-1.5-2.5C6.7 10.7 6 9.9 6 9c0-.9.4-1.8 1-2.4c.9-.8 2-1.3 3.3-1.5c.5-.1.9.4.8.9c-.1.4-.5.7-.9.8c-.8.2-1.5.6-2.1 1.2c-.4.4-.6 1-.6 1.6c0 .5.2 1 .8 1.5c.7.6 1.2 1.2 1.4 2.2c.2.7-.3 1.3-.9 1.3H9c-.8 0-1.2-.8-1-1.5z"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Tutor Inteligente de C</h1>
+                    <p class="text-gray-600">Método LEPEEs para provas, criado por gabrielhando para todos, todas e tads :)</p>
+                </div>
             </div>
-            <div>
-                <label for="code-input" class="block font-bold text-gray-700 mb-2">💻 Código:</label>
-                <textarea id="code-input" placeholder="Cole seu código C..." class="w-full h-64 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500 font-mono text-sm"></textarea>
+             <div class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-lg p-4">
+                <div class="flex items-center justify-between flex-wrap gap-4">
+                    <div>
+                        <p id="current-date" class="text-sm opacity-90"></p>
+                        <p id="exam-countdown" class="font-bold text-lg"></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm opacity-90">Foco Principal:</p>
+                        <p class="font-bold">Ponteiros & Alocação Dinâmica</p>
+                    </div>
+                </div>
             </div>
-            <button id="analyze-button" class="w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 text-lg">
-                <span id="analyze-text">Analisar Código</span>
-                <div id="spinner" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white hidden"></div>
-            </button>
-            <div id="feedback-container" class="mt-6"></div>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="bg-white rounded-xl shadow-lg mb-6 overflow-hidden">
+            <div class="flex flex-wrap border-b">
+                <button data-tab="inicio" class="tab-button flex items-center gap-2 px-6 py-3 font-medium transition-colors text-gray-600 hover:bg-gray-50 tab-active">Início</button>
+                <button data-tab="trilha" class="tab-button flex items-center gap-2 px-6 py-3 font-medium transition-colors text-gray-600 hover:bg-gray-50">Trilha</button>
+                <button data-tab="pratica" class="tab-button flex items-center gap-2 px-6 py-3 font-medium transition-colors text-gray-600 hover:bg-gray-50">Prática</button>
+                <button data-tab="progresso" class="tab-button flex items-center gap-2 px-6 py-3 font-medium transition-colors text-gray-600 hover:bg-gray-50">Progresso</button>
+            </div>
+            <div class="p-6">
+                <div id="inicio-view" class="view view-active space-y-6"></div>
+                <div id="trilha-view" class="view space-y-6"></div>
+                <div id="pratica-view" class="view space-y-4"></div>
+                <div id="progresso-view" class="view"></div>
+            </div>
         </div>
     </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const app = {
+        // STATE
+        activeTab: 'inicio',
+        isAnalyzing: false,
+        examDate: new Date('2025-11-03'),
+        conversationHistory: [],
+        progressData: {},
+        topics: {
+            p1: [
+                { id: 'estruturasCondicionais', nome: 'Estruturas Condicionais', urgencia: 'alta' },
+                { id: 'loops', nome: 'Loops (while/for)', urgencia: 'alta' },
+                { id: 'funcoes', nome: 'Funções', urgencia: 'alta' },
+                { id: 'recursividade', nome: 'Recursividade', urgencia: 'alta' },
+                { id: 'vetores', nome: 'Vetores', urgencia: 'alta' },
+                { id: 'matrizes', nome: 'Matrizes', urgencia: 'alta' },
+                { id: 'strings', nome: 'Strings', urgencia: 'alta' }
+            ],
+            p2: [
+                { id: 'ponteiros', nome: 'Ponteiros', urgencia: 'critica' },
+                { id: 'alocacaoDinamica', nome: 'Alocação Dinâmica', urgencia: 'critica' }
+            ]
+        },
+        lepeesSteps: [
+            { id: 'ler', label: 'L', title: 'Ler o problema', type: 'checkbox' },
+            { id: 'entender', label: 'E', title: 'Entender (entradas, saídas, regras)', type: 'textarea' },
+            { id: 'portugues', label: 'P', title: 'Português (pseudocódigo linha por linha)', type: 'textarea' },
+            { id: 'estruturas', label: 'E', title: 'Estruturas (variáveis, if, loop, função)', type: 'textarea' },
+            { id: 'esqueleto', label: 'Es', title: 'Esqueleto (em C)', type: 'textarea' }
+        ],
 
-    <script>
-        document.getElementById('analyze-button').addEventListener('click', async () => {
-            const exercise = document.getElementById('exercise-input').value;
-            const code = document.getElementById('code-input').value;
-            const feedbackContainer = document.getElementById('feedback-container');
-            const button = document.getElementById('analyze-button');
-            const buttonText = document.getElementById('analyze-text');
-            const spinner = document.getElementById('spinner');
+        // DOM ELEMENTS
+        elements: {},
 
-            if (!exercise.trim() || !code.trim()) {
-                alert('Por favor, preencha o enunciado e o código.');
-                return;
+        // INITIALIZATION
+        init() {
+            this.elements = {
+                tabButtons: document.querySelectorAll('.tab-button'),
+                views: {
+                    inicio: document.getElementById('inicio-view'),
+                    trilha: document.getElementById('trilha-view'),
+                    pratica: document.getElementById('pratica-view'),
+                    progresso: document.getElementById('progresso-view'),
+                },
+                dateDisplay: document.getElementById('current-date'),
+                examCountdown: document.getElementById('exam-countdown'),
+            };
+            this.setupEventListeners();
+            this.loadProgress();
+            this.render();
+            this.updateDate();
+            this.updateCountdown();
+        },
+
+        // EVENT LISTENERS
+        setupEventListeners() {
+            this.elements.tabButtons.forEach(button => {
+                button.addEventListener('click', () => this.setActiveTab(button.dataset.tab));
+            });
+        },
+        
+        // DATE & COUNTDOWN
+        updateDate() {
+            const today = new Date();
+            this.elements.dateDisplay.textContent = today.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        },
+
+        updateCountdown() {
+            const today = new Date();
+            const examDay = new Date(this.examDate);
+            today.setHours(0, 0, 0, 0);
+            examDay.setHours(0, 0, 0, 0);
+            const diffTime = examDay - today;
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            let message = '';
+            if (diffDays > 1) message = `⚠️ Prova 2 em ${diffDays} dias!`;
+            else if (diffDays === 1) message = `⚠️ Prova 2 é amanhã!`;
+            else if (diffDays === 0) message = `⚠️ Prova 2 é hoje! Boa sorte!`;
+            else message = `Prova 2 já passou.`;
+            this.elements.examCountdown.textContent = message;
+        },
+
+        // STATE MANAGEMENT
+        setActiveTab(tabId) {
+            this.activeTab = tabId;
+            this.render();
+        },
+
+        setLoading(button, isLoading, text = 'Analisando...') {
+            button.disabled = isLoading;
+            const originalText = button.dataset.originalText || button.innerHTML;
+            if (isLoading) {
+                button.dataset.originalText = originalText;
+                button.innerHTML = `<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> ${text}`;
+            } else {
+                button.innerHTML = originalText;
             }
+        },
 
-            button.disabled = true;
-            buttonText.textContent = 'Analisando...';
-            spinner.classList.remove('hidden');
-            feedbackContainer.innerHTML = '';
+        saveProgress() {
+            localStorage.setItem('tutorCProgress', JSON.stringify(this.progressData));
+        },
 
+        loadProgress() {
+            const savedData = localStorage.getItem('tutorCProgress');
+            if (savedData) this.progressData = JSON.parse(savedData);
+            else {
+                 [...this.topics.p1, ...this.topics.p2].forEach(t => {
+                     if(this.progressData[t.id] === undefined) this.progressData[t.id] = 0;
+                 });
+            }
+        },
+
+        // RENDERING
+        render() {
+            Object.values(this.elements.views).forEach(view => view.style.display = 'none');
+            this.elements.views[this.activeTab].style.display = 'block';
+
+            this.elements.tabButtons.forEach(button => {
+                button.classList.toggle('tab-active', button.dataset.tab === this.activeTab);
+            });
+
+            this[`render_${this.activeTab}`]();
+        },
+        
+        render_inicio() {
+            this.elements.views.inicio.innerHTML = `
+                <div class="bg-violet-50 border-l-4 border-violet-500 p-4 rounded">
+                    <h3 class="font-bold text-violet-900 mb-2">💡 Seu Acrônimo: LEPEEs</h3>
+                    <p class="text-violet-800">Integramos seu método de estudo na aba "Prática". Use-o para planejar suas soluções antes de codificar!</p>
+                </div>
+                 <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded mt-6">
+                    <h3 class="font-bold text-orange-900 mb-2">🚀 Acesso Rápido ao Compilador</h3>
+                    <p class="text-orange-800 mb-3">Estou compilando os códigos no Google Colab. Use o botão abaixo para abrir o ambiente de testes.</p>
+                    <a href="https://colab.research.google.com/" target="_blank" class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+                        Abrir Google Colab
+                    </a>
+                </div>`;
+        },
+
+        render_trilha() {
+             const renderTopicList = (title, topics) => `
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">${title}</h3>
+                    <div class="grid gap-3">
+                        ${topics.map(topic => this.renderTopicCard(topic)).join('')}
+                    </div>
+                </div>`;
+            
+            this.elements.views.trilha.innerHTML = `
+                <div id="loading-exercise" class="hidden bg-blue-50 border-2 border-blue-500 rounded-lg p-4 items-center gap-3">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                    <div>
+                        <p class="font-bold text-blue-900">Gerando exercício personalizado...</p>
+                        <p class="text-sm text-blue-700">A IA está criando um desafio para você. Aguarde!</p>
+                    </div>
+                </div>
+                ${renderTopicList('Conteúdo P1 (Nivelamento)', this.topics.p1)}
+                ${renderTopicList('Conteúdo P2 (Foco Principal)', this.topics.p2)}
+            `;
+            
+            this.elements.views.trilha.querySelectorAll('.practice-button').forEach(button => {
+                button.addEventListener('click', (e) => this.generateExercise(e.currentTarget.dataset.topic));
+            });
+        },
+        
+        renderTopicCard(topic) {
+            const progress = this.progressData[topic.id] || 0;
+            const colors = {
+                alta: { border: 'border-red-200', bg: 'bg-red-500', button: 'bg-red-500 hover:bg-red-600' },
+                critica: { border: 'border-violet-200', bg: 'bg-violet-500', button: 'bg-violet-500 hover:bg-violet-600' }
+            };
+            const color = colors[topic.urgencia] || colors.alta;
+
+            return `
+                <div class="bg-white border-2 ${color.border} rounded-lg p-4">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-gray-800">${topic.nome}</h4>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                                <div class="${color.bg} h-2 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">${progress}%</p>
+                        </div>
+                        <button data-topic="${topic.nome}" class="practice-button ${color.button} text-white px-4 py-2 rounded-lg flex items-center gap-2 min-w-[120px] justify-center">
+                            Praticar
+                        </button>
+                    </div>
+                </div>`;
+        },
+
+        render_pratica() {
+            this.elements.views.pratica.innerHTML = `
+                <div class="bg-white border-2 border-gray-200 rounded-lg p-4">
+                    <label class="block font-bold text-gray-800 mb-2">📝 Enunciado do Exercício:</label>
+                    <textarea id="exercise-input" placeholder="Cole o enunciado aqui ou gere um na aba Trilha..." class="w-full h-24 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500"></textarea>
+                </div>
+
+                <div class="bg-white border-2 border-gray-200 rounded-lg p-4 space-y-4">
+                    <h3 class="text-xl font-bold text-gray-800">Seu Planejamento (LEPEEs)</h3>
+                    <div id="lepees-fields" class="space-y-4">${this.renderLepeesFields()}</div>
+                    <button id="analyze-plan-button" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2">Analisar Plano</button>
+                </div>
+                
+                <div class="bg-white border-2 border-gray-200 rounded-lg p-4">
+                    <label class="block font-bold text-gray-800 mb-2">💻 Seu Código C:</label>
+                    <textarea id="code-input" placeholder="Após a análise do plano, escreva seu código aqui..." class="w-full h-56 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500 font-mono text-sm"></textarea>
+                </div>
+                <button id="analyze-code-button" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-3 text-lg">Analisar Código</button>
+                
+                <div id="feedback-container" class="space-y-4 mt-6"></div>
+                <div id="next-step-container" class="hidden mt-6 bg-white border-2 border-gray-200 rounded-lg p-4 space-y-4"></div>
+                <div id="chat-container" class="hidden mt-6 bg-white border-2 border-gray-200 rounded-lg p-4 space-y-4">
+                    <h3 class="text-lg font-bold text-gray-800">Converse sobre o Feedback</h3>
+                    <div id="chat-messages" class="flex flex-col gap-2 h-48 overflow-y-auto p-2 border rounded-md bg-gray-50"></div>
+                    <div class="flex gap-2">
+                        <input type="text" id="chat-input" placeholder="Tire sua dúvida sobre a análise..." class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-violet-500">
+                        <button id="chat-send-button" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center">Enviar</button>
+                    </div>
+                </div>
+            `;
+            // Re-attach listeners for dynamically created elements
+            document.getElementById('analyze-plan-button').addEventListener('click', () => this.analyzePlan());
+            document.getElementById('analyze-code-button').addEventListener('click', () => this.analyzeCode());
+            document.getElementById('chat-send-button').addEventListener('click', () => this.sendChatMessage());
+            document.getElementById('chat-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') this.sendChatMessage(); });
+        },
+
+        renderLepeesFields() {
+            return this.lepeesSteps.map(step => {
+                if (step.type === 'checkbox') {
+                    return `<div class="flex items-center gap-4">
+                                <span class="lepees-label">${step.label}</span>
+                                <div class="w-full flex items-center bg-white p-3 rounded-lg border border-gray-200">
+                                    <input id="lepees-${step.id}" type="checkbox" class="h-5 w-5 rounded text-violet-600 focus:ring-violet-500">
+                                    <label for="lepees-${step.id}" class="ml-3 block font-bold text-gray-700">${step.title}</label>
+                                </div>
+                            </div>`;
+                } else {
+                    return `<div class="flex items-start gap-4">
+                                <span class="lepees-label">${step.label}</span>
+                                <div class="w-full">
+                                    <label class="block font-bold text-gray-700 mb-1">${step.title}</label>
+                                    <textarea id="lepees-${step.id}" class="w-full h-20 p-2 border rounded-lg focus:ring-2 focus:ring-violet-500"></textarea>
+                                </div>
+                            </div>`;
+                }
+            }).join('');
+        },
+        
+        render_progresso() {
+            const allTopics = [...this.topics.p1, ...this.topics.p2];
+            this.elements.views.progresso.innerHTML = allTopics.map(topic => {
+                const progress = this.progressData[topic.id] || 0;
+                return `<div class="bg-white border-2 border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between mb-2">
+                                <h4 class="font-bold">${topic.nome}</h4>
+                                <span class="text-sm font-semibold">${progress}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-violet-500 to-indigo-500 h-3 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                            </div>
+                        </div>`;
+            }).join('');
+        },
+
+        renderFeedback(htmlContent, color = 'gray') {
+            const container = document.getElementById('feedback-container');
+            if(container) {
+                const card = document.createElement('div');
+                card.className = `border-l-4 p-4 rounded bg-${color}-50 border-${color}-500 prose max-w-none`;
+                card.innerHTML = htmlContent;
+                container.innerHTML = '';
+                container.appendChild(card);
+            }
+        },
+
+        addChatMessage(message, role) {
+            const chatMessages = document.getElementById('chat-messages');
+            if(chatMessages) {
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${role}`;
+                bubble.innerHTML = showdownConverter.makeHtml(message);
+                chatMessages.appendChild(bubble);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        },
+
+        renderNextStep(assessment) {
+            const container = document.getElementById('next-step-container');
+            if (!container) return;
+
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+
+            const messageEl = document.createElement('p');
+            messageEl.className = 'text-center font-medium text-gray-700';
+            messageEl.textContent = assessment.message;
+            container.appendChild(messageEl);
+            
+            if (assessment.nextAction === 'REDO') {
+                const redoButton = document.createElement('button');
+                redoButton.className = 'w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg';
+                redoButton.textContent = 'Ok, vou tentar corrigir!';
+                redoButton.onclick = () => container.classList.add('hidden');
+                container.appendChild(redoButton);
+            } else {
+                 const btn_reinforce = document.createElement('button');
+                 btn_reinforce.className = 'w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg';
+                 btn_reinforce.textContent = 'Gerar Exercício Similar';
+                 btn_reinforce.onclick = () => this.generateExercise(assessment.topicName, 'normal');
+                 container.appendChild(btn_reinforce);
+
+                if (assessment.nextAction === 'PROCEED') {
+                    const btn_proceed = document.createElement('button');
+                    btn_proceed.className = 'w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg mt-2';
+                    btn_proceed.textContent = 'Gerar Próximo Exercício (Nível Acima)';
+                    btn_proceed.onclick = () => this.generateExercise(assessment.topicName, 'dificil');
+                    container.appendChild(btn_proceed);
+                }
+            }
+        },
+        
+        // API CALLS
+        async callApi(endpoint, body) {
             try {
-                // O front-end NÃO fala com a IA. Ele fala com o nosso servidor.
-                const response = await fetch('/analyze', {
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ exercise, code })
+                    body: JSON.stringify(body)
                 });
-
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || 'Ocorreu um erro no servidor.');
+                    throw new Error(errorData.error || 'Erro no servidor');
                 }
-
-                const result = await response.json();
-                
-                // O servidor nos devolve o HTML já formatado
-                feedbackContainer.innerHTML = `
-                    <div class="border-l-4 p-4 rounded ${result.isCorrect ? 'bg-green-50 border-green-500' : 'bg-red-50 border-red-500'} prose max-w-none">
-                        ${result.feedbackHtml}
-                    </div>
-                `;
-
+                return await response.json();
             } catch (error) {
-                feedbackContainer.innerHTML = `<div class="bg-red-100 text-red-800 p-4 rounded"><strong>Erro:</strong> ${error.message}</div>`;
-                console.error('Erro:', error);
-            } finally {
-                button.disabled = false;
-                buttonText.textContent = 'Analisar Código';
-                spinner.classList.add('hidden');
+                console.error(`Erro na chamada da API para ${endpoint}:`, error);
+                alert(`Ocorreu um erro: ${error.message}. Tente novamente.`);
+                return null;
             }
-        });
-    </script>
+        },
+
+        async generateExercise(topicName, difficulty = 'normal') {
+            const button = document.querySelector(`.practice-button[data-topic="${topicName}"]`);
+            if (button) this.setLoading(button, true, '');
+            else document.getElementById('next-step-container').innerHTML = `<div class="text-center font-bold">Gerando novo exercício...</div>`;
+
+            const data = await this.callApi('/api/generate-exercise', { topicName, difficulty });
+
+            if (button) this.setLoading(button, false);
+
+            if (data) {
+                document.getElementById('exercise-input').value = data.enunciado;
+                document.getElementById('code-input').value = data.prototipo || '';
+                document.getElementById('feedback-container').innerHTML = '';
+                document.getElementById('chat-container').classList.add('hidden');
+                document.getElementById('next-step-container').classList.add('hidden');
+                this.conversationHistory = [];
+                this.lepeesSteps.forEach(step => {
+                    const el = document.getElementById(`lepees-${step.id}`);
+                    if (el) {
+                       if (step.type === 'checkbox') el.checked = false;
+                       else el.value = '';
+                    }
+                });
+                this.setActiveTab('pratica');
+            }
+        },
+
+        async analyzePlan() {
+             const button = document.getElementById('analyze-plan-button');
+             this.setLoading(button, true, 'Analisando Plano...');
+             const exercise = document.getElementById('exercise-input').value.trim();
+             if (!exercise) {
+                 alert('Por favor, cole o enunciado do exercício primeiro.');
+                 this.setLoading(button, false);
+                 return;
+             }
+             const lepeesData = this.lepeesSteps.reduce((acc, step) => {
+                 const el = document.getElementById(`lepees-${step.id}`);
+                 acc[step.id] = (step.type === 'checkbox') ? (el.checked ? "Sim, li o problema." : "Não marquei que li o problema.") : el.value.trim();
+                 return acc;
+             }, {});
+
+             const data = await this.callApi('/api/analyze-plan', { exercise, lepeesData });
+             this.setLoading(button, false);
+             if (data) {
+                 this.renderFeedback(data.feedbackHtml, data.readyToCode ? 'green' : 'yellow');
+             }
+        },
+
+        async analyzeCode() {
+            const button = document.getElementById('analyze-code-button');
+            this.setLoading(button, true, 'Analisando Código...');
+
+            if (this.conversationHistory.length === 0) {
+                 document.getElementById('chat-container').classList.add('hidden');
+                 document.getElementById('chat-messages').innerHTML = '';
+                 document.getElementById('next-step-container').classList.add('hidden');
+                 this.conversationHistory.push({ role: 'user', parts: [{ text: `Exercício: "${document.getElementById('exercise-input').value.trim()}"` }] });
+            }
+            
+            const userPrompt = `Meu código (versão atual):\n\`\`\`c\n${document.getElementById('code-input').value.trim()}\n\`\`\`\n\nPor favor, analise-o novamente, considerando nosso histórico.`;
+            this.conversationHistory.push({ role: 'user', parts: [{ text: userPrompt }] });
+
+            const data = await this.callApi('/api/analyze-code', { 
+                exercise: document.getElementById('exercise-input').value.trim(), 
+                code: document.getElementById('code-input').value.trim(),
+                history: this.conversationHistory
+            });
+            this.setLoading(button, false);
+
+            if (data) {
+                this.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(data) }] }); // Store raw response for context
+                const isCorrect = data.assessment.nextAction !== 'REDO';
+                this.renderFeedback(data.feedbackHtml, isCorrect ? 'green' : 'red');
+                document.getElementById('chat-container').classList.remove('hidden');
+                this.renderNextStep(data.assessment);
+
+                if(isCorrect && data.assessment.topicId && this.progressData.hasOwnProperty(data.assessment.topicId)) {
+                    this.progressData[data.assessment.topicId] = Math.min(100, (this.progressData[data.assessment.topicId] || 0) + 25);
+                    this.saveProgress();
+                }
+            }
+        },
+        
+        async sendChatMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const chatSendButton = document.getElementById('chat-send-button');
+            const userText = chatInput.value.trim();
+            if(!userText) return;
+
+            this.addChatMessage(userText, 'user');
+            chatInput.value = '';
+            chatInput.disabled = true;
+            chatSendButton.disabled = true;
+
+            this.conversationHistory.push({ role: 'user', parts: [{ text: userText }] });
+            const data = await this.callApi('/api/chat', { history: this.conversationHistory });
+            
+            chatInput.disabled = false;
+            chatSendButton.disabled = false;
+            
+            if(data) {
+                this.conversationHistory.push({ role: 'model', parts: [{ text: data.replyHtml }] });
+                this.addChatMessage(data.replyHtml, 'model');
+            }
+        }
+    };
+
+    app.init();
+});
+</script>
 </body>
 </html>
