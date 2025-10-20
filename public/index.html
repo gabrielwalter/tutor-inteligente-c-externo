@@ -10,13 +10,102 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Fira+Code&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        .font-mono { font-family: 'Fira Code', monospace; }
-        .tab-button.tab-active { background-color: #6d28d9; color: white; }
-        .view { display: none; }
-        .view-active { display: block; animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .lepees-label { background-color: #ede9fe; color: #5b21b6; font-weight: 800; border-radius: 9999px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.25rem; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f3f4f6; 
+        }
+        
+        .font-mono { 
+            font-family: 'Fira Code', monospace; 
+        }
+        
+        .tab-button.tab-active { 
+            background-color: #6d28d9; 
+            color: white; 
+        }
+        
+        .view { 
+            display: none; 
+        }
+        
+        .view-active { 
+            display: block; 
+            animation: fadeIn 0.5s ease-in-out; 
+        }
+        
+        @keyframes fadeIn { 
+            from { 
+                opacity: 0; 
+                transform: translateY(10px); 
+            } 
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            } 
+        }
+        
+        .lepees-label { 
+            background-color: #ede9fe; 
+            color: #5b21b6; 
+            font-weight: 800; 
+            border-radius: 9999px; 
+            width: 40px; 
+            height: 40px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            flex-shrink: 0; 
+            font-size: 1.25rem; 
+        }
+        
+        /* Estilos para o vídeo profissional */
+        .video-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px;
+        }
+        
+        .video-inner {
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(109, 40, 217, 0.05), rgba(79, 70, 229, 0.05));
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quick-action-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
@@ -60,6 +149,7 @@
             </div>
         </div>
     </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const app = {
@@ -188,17 +278,156 @@ document.addEventListener('DOMContentLoaded', () => {
         
         render_inicio() {
             this.elements.views.inicio.innerHTML = `
-                <div class="bg-violet-50 border-l-4 border-violet-500 p-4 rounded">
-                    <h3 class="font-bold text-violet-900 mb-2">💡 Seu Acrônimo: LEPEEs</h3>
-                    <p class="text-violet-800">Integramos seu método de estudo na aba "Prática". Use-o para planejar suas soluções antes de codificar!</p>
+                <!-- Hero Section com Vídeo -->
+                <div class="hero-gradient rounded-2xl p-8 text-white mb-8">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h2 class="text-4xl font-bold mb-4">Bem-vindo ao seu Tutor Pessoal!</h2>
+                            <p class="text-lg mb-6 opacity-90">Aprenda programação C de forma inteligente e estruturada com o método LEPEEs. Uma abordagem personalizada para dominar algoritmos e se preparar para provas.</p>
+                            <div class="flex flex-wrap gap-3">
+                                <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                                    <span class="font-semibold">✨ IA Personalizada</span>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                                    <span class="font-semibold">📚 Método LEPEEs</span>
+                                </div>
+                                <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
+                                    <span class="font-semibold">🎯 Foco em Provas</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Container do Vídeo -->
+                        <div class="video-container">
+                            <div class="video-inner">
+                                <video class="w-full aspect-video object-cover" controls poster="https://via.placeholder.com/640x360/6d28d9/ffffff?text=Tutorial+de+Programa%C3%A7%C3%A3o+C">
+                                    <source src="./meu-video.mp4" type="video/mp4">
+                                    <source src="./meu-video.webm" type="video/webm">
+                                    <source src="./meu-video.mov" type="video/quicktime">
+                                    <!-- Fallback para quando não há vídeo -->
+                                    <div class="aspect-video flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 text-white">
+                                        <svg class="w-16 h-16 mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <p class="text-lg font-semibold">Vídeo de Apresentação</p>
+                                        <p class="text-sm opacity-75">Coloque seu vídeo como "meu-video.mp4" na pasta public/</p>
+                                    </div>
+                                </video>
+                                <div class="video-overlay"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                 <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded mt-6">
-                    <h3 class="font-bold text-orange-900 mb-2">🚀 Acesso Rápido ao Compilador</h3>
-                    <p class="text-orange-800 mb-3">Estou compilando os códigos no Google Colab. Use o botão abaixo para abrir o ambiente de testes.</p>
-                    <a href="https://colab.research.google.com/" target="_blank" class="inline-block bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition-colors">
+
+                <!-- Features Cards -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="feature-card bg-white rounded-xl p-6 shadow-lg border-l-4 border-violet-500">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-violet-100 p-3 rounded-lg mr-4">
+                                <svg class="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Método LEPEEs</h3>
+                        </div>
+                        <p class="text-gray-600">Estruture seu raciocínio com o acrônimo que você criou: <strong>Ler, Entender, Português, Estruturas, Esqueleto</strong>.</p>
+                    </div>
+
+                    <div class="feature-card bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">IA Personalizada</h3>
+                        </div>
+                        <p class="text-gray-600">Feedback inteligente e exercícios gerados especificamente para suas necessidades e nível de conhecimento.</p>
+                    </div>
+
+                    <div class="feature-card bg-white rounded-xl p-6 shadow-lg border-l-4 border-green-500">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-lg mr-4">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Progresso Visual</h3>
+                        </div>
+                        <p class="text-gray-600">Monitore seu progresso em tempo real com estatísticas detalhadas de cada tópico estudado.</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-violet-50 border-l-4 border-violet-500 rounded-lg p-6 mb-6">
+                    <h3 class="font-bold text-violet-900 mb-4 text-lg">🚀 Ações Rápidas</h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <button onclick="app.setActiveTab('trilha')" class="quick-action-btn bg-violet-600 hover:bg-violet-700 text-white font-bold py-4 px-6 rounded-lg transition-all text-left">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-4">📚</span>
+                                <div>
+                                    <div class="font-bold text-lg">Iniciar Trilha de Estudos</div>
+                                    <div class="text-sm opacity-90">Explore tópicos e gere exercícios personalizados</div>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button onclick="app.setActiveTab('pratica')" class="quick-action-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-lg transition-all text-left">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-4">💻</span>
+                                <div>
+                                    <div class="font-bold text-lg">Praticar com LEPEEs</div>
+                                    <div class="text-sm opacity-90">Use sua metodologia estruturada</div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LEPEEs Method Explanation -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">💡 Como Funciona o Método LEPEEs?</h3>
+                    <div class="grid md:grid-cols-5 gap-4">
+                        <div class="text-center p-4 bg-violet-50 rounded-lg">
+                            <div class="lepees-label mx-auto mb-2">L</div>
+                            <h4 class="font-bold text-sm">Ler</h4>
+                            <p class="text-xs text-gray-600">o problema</p>
+                        </div>
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                            <div class="lepees-label mx-auto mb-2" style="background-color: #dbeafe; color: #1d4ed8;">E</div>
+                            <h4 class="font-bold text-sm">Entender</h4>
+                            <p class="text-xs text-gray-600">entradas/saídas</p>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="lepees-label mx-auto mb-2" style="background-color: #dcfce7; color: #166534;">P</div>
+                            <h4 class="font-bold text-sm">Português</h4>
+                            <p class="text-xs text-gray-600">pseudocódigo</p>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                            <div class="lepees-label mx-auto mb-2" style="background-color: #fef3c7; color: #92400e;">E</div>
+                            <h4 class="font-bold text-sm">Estruturas</h4>
+                            <p class="text-xs text-gray-600">variáveis/loops</p>
+                        </div>
+                        <div class="text-center p-4 bg-red-50 rounded-lg">
+                            <div class="lepees-label mx-auto mb-2" style="background-color: #fee2e2; color: #991b1b;">Es</div>
+                            <h4 class="font-bold text-sm">Esqueleto</h4>
+                            <p class="text-xs text-gray-600">código em C</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colab Integration -->
+                <div class="bg-orange-50 border-l-4 border-orange-500 rounded-lg p-6">
+                    <h3 class="font-bold text-orange-900 mb-3 text-lg">🔧 Ambiente de Desenvolvimento</h3>
+                    <p class="text-orange-800 mb-4">Compile e teste seus códigos diretamente no Google Colab integrado ao projeto.</p>
+                    <a href="https://colab.research.google.com/" target="_blank" class="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
+                        </svg>
                         Abrir Google Colab
                     </a>
-                </div>`;
+                </div>
+            `;
         },
 
         render_trilha() {
@@ -585,6 +814,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Exponha o app globalmente para acessar nos event handlers
+    window.app = app;
     app.init();
 });
 </script>
