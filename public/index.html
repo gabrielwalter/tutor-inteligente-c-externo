@@ -106,6 +106,19 @@
         .quick-action-btn:hover {
             transform: translateY(-2px);
         }
+
+        /* Estilo para o vídeo com autoplay */
+        .hero-video {
+            position: relative;
+        }
+
+        .hero-video video {
+            transition: all 0.3s ease;
+        }
+
+        .hero-video:hover video {
+            transform: scale(1.02);
+        }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
@@ -297,21 +310,20 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         
-                        <!-- Container do Vídeo -->
-                        <div class="video-container">
+                        <!-- Container do Vídeo com Poster da Britney e Autoplay -->
+                        <div class="video-container hero-video">
                             <div class="video-inner">
-                                <video class="w-full aspect-video object-cover" controls poster="https://via.placeholder.com/640x360/6d28d9/ffffff?text=Tutorial+de+Programa%C3%A7%C3%A3o+C">
+                                <video id="hero-video" class="w-full aspect-video object-cover" 
+                                       controls 
+                                       autoplay 
+                                       muted
+                                       loop
+                                       poster="https://media.vanityfair.com/photos/57c04f40daec5e0d4f5d7cf7/16:9/w_1280,c_limit/t-britney-spears-2001-vma-snake.jpg" 
+                                       preload="metadata">
                                     <source src="./meu-video.mp4" type="video/mp4">
                                     <source src="./meu-video.webm" type="video/webm">
                                     <source src="./meu-video.mov" type="video/quicktime">
-                                    <!-- Fallback para quando não há vídeo -->
-                                    <div class="aspect-video flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900 text-white">
-                                        <svg class="w-16 h-16 mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
-                                        </svg>
-                                        <p class="text-lg font-semibold">Vídeo de Apresentação</p>
-                                        <p class="text-sm opacity-75">Coloque seu vídeo como "meu-video.mp4" na pasta public/</p>
-                                    </div>
+                                    Seu navegador não suporta vídeos.
                                 </video>
                                 <div class="video-overlay"></div>
                             </div>
@@ -428,6 +440,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     </a>
                 </div>
             `;
+
+            // Configurar autoplay robusto do vídeo
+            setTimeout(() => {
+                const video = document.getElementById('hero-video');
+                if (video) {
+                    // Tentar fazer autoplay
+                    video.play().catch(err => {
+                        console.log('Autoplay bloqueado pelo navegador. Mostrando poster da Britney.');
+                        // Se autoplay falhar, o poster da Britney fica visível
+                    });
+
+                    // Adicionar evento para unmute quando usuário clicar
+                    video.addEventListener('click', () => {
+                        if (video.muted) {
+                            video.muted = false;
+                            video.volume = 0.5; // Volume médio
+                        }
+                    });
+
+                    // Mostrar dica de áudio quando hover
+                    video.addEventListener('mouseenter', () => {
+                        if (video.muted && !video.paused) {
+                            video.title = 'Clique para ativar o áudio';
+                        }
+                    });
+                }
+            }, 500);
         },
 
         render_trilha() {
