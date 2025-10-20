@@ -15,7 +15,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 async function callGemini(systemPrompt, userPrompt, expectJson = true) {
     const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: "gemini-2.5-flash",
         systemInstruction: systemPrompt,
     });
 
@@ -33,8 +33,8 @@ app.get('/', (req, res) => {
 app.post('/api/generate-exercise', async (req, res) => {
     try {
         const { topicName, difficulty = 'normal' } = req.body;
-        const systemPrompt = `És um gerador de exercícios de C. Cria um exercício sobre "${topicName}" com dificuldade ${difficulty}. Responde em JSON: {"enunciado": "...", "prototipo": "// código inicial aqui"}`;
-        const userPrompt = `Gera um exercício prático sobre ${topicName}.`;
+        const systemPrompt = `Você é um gerador de exercícios de C. Crie um exercício sobre "${topicName}" com dificuldade ${difficulty}. Responda em JSON: {"enunciado": "...", "prototipo": "// código inicial aqui"}`;
+        const userPrompt = `Gere um exercício prático sobre ${topicName}.`;
         const responseText = await callGemini(systemPrompt, userPrompt, true);
         const result = JSON.parse(responseText);
         res.json(result);
@@ -48,7 +48,7 @@ app.post('/api/generate-exercise', async (req, res) => {
 app.post('/api/analyze-plan', async (req, res) => {
     try {
         const { exercise, lepeesData } = req.body;
-        const systemPrompt = `És um tutor de C. Analisa o planejamento LEPEEs do aluno. Verifica se ele entendeu o problema e planejou bem. Responde em JSON: {"feedback": "...", "readyToCode": boolean}`;
+        const systemPrompt = `Você é um tutor de C. Analise o planejamento LEPEEs do aluno. Verifique se ele entendeu o problema e planejou bem. Responda em JSON: {"feedback": "...", "readyToCode": boolean}`;
         const userPrompt = `Exercício: "${exercise}"\n\nPlanejamento do aluno:\n${JSON.stringify(lepeesData, null, 2)}`;
         const responseText = await callGemini(systemPrompt, userPrompt, true);
         const result = JSON.parse(responseText);
@@ -63,7 +63,7 @@ app.post('/api/analyze-plan', async (req, res) => {
 app.post('/api/analyze-code', async (req, res) => {
     try {
         const { exercise, code, history } = req.body;
-        const systemPrompt = `És um tutor de C. Analisa o código do aluno no contexto do histórico da conversa. Elogia as correções. Foca-te nos erros restantes. Avalia o domínio e sugere o próximo passo (PROCEED, REINFORCE, REDO). Responde em JSON: {"feedback": "...", "assessment": {"nextAction": "...", "message": "...", "topicName": "...", "topicId": "..."}}`;
+        const systemPrompt = `Você é um tutor de C. Analise o código do aluno no contexto do histórico da conversa. Elogie as correções. Foque nos erros restantes. Avalie o domínio e sugira o próximo passo (PROCEED, REINFORCE, REDO). Responda em JSON: {"feedback": "...", "assessment": {"nextAction": "...", "message": "...", "topicName": "...", "topicId": "..."}}`;
         const userPrompt = `Contexto: ${JSON.stringify(history)}\n\nExercício: "${exercise}"\n\nCódigo Atual:\n${code}`;
         const responseText = await callGemini(systemPrompt, userPrompt, true);
         const result = JSON.parse(responseText);
@@ -78,7 +78,7 @@ app.post('/api/analyze-code', async (req, res) => {
 app.post('/api/chat', async (req, res) => {
     try {
         const { history } = req.body;
-        const systemPrompt = `És um tutor de C respondendo dúvidas do aluno sobre o feedback anterior. Sê conciso e didático.`;
+        const systemPrompt = `Você é um tutor de C respondendo dúvidas do aluno sobre o feedback anterior. Seja conciso e didático.`;
         const userPrompt = JSON.stringify(history);
         const responseText = await callGemini(systemPrompt, userPrompt, false);
         res.json({ replyHtml: converter.makeHtml(responseText) });
@@ -90,5 +90,5 @@ app.post('/api/chat', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor a rodar na porta ${PORT}`);
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
