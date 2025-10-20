@@ -29,6 +29,37 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Endpoint para gerar exercícios
+app.post('/api/generate-exercise', async (req, res) => {
+    try {
+        const { topicName, difficulty = 'normal' } = req.body;
+        const systemPrompt = `És um gerador de exercícios de C. Cria um exercício sobre "${topicName}" com dificuldade ${difficulty}. Responde em JSON: {"enunciado": "...", "prototipo": "// código inicial aqui"}`;
+        const userPrompt = `Gera um exercício prático sobre ${topicName}.`;
+        const responseText = await callGemini(systemPrompt, userPrompt, true);
+        const result = JSON.parse(responseText);
+        res.json(result);
+    } catch (error) {
+        console.error('Erro em /api/generate-exercise:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Endpoint para analisar plano LEPEEs
+app.post('/api/analyze-plan', async (req, res) => {
+    try {
+        const { exercise, lepeesData } = req.body;
+        const systemPrompt = `És um tutor de C. Analisa o planejamento LEPEEs do aluno. Verifica se ele entendeu o problema e planejou bem. Responde em JSON: {"feedback": "...", "readyToCode": boolean}`;
+        const userPrompt = `Exercício: "${exercise}"\n\nPlanejamento do aluno:\n${JSON.stringify(lepeesData, null, 2)}`;
+        const responseText = await callGemini(systemPrompt, userPrompt, true);
+        const result = JSON.parse(responseText);
+        res.json({ feedbackHtml: converter.makeHtml(result.feedback), readyToCode: result.readyToCode });
+    } catch (error) {
+        console.error('Erro em /api/analyze-plan:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Endpoint para analisar código
 app.post('/api/analyze-code', async (req, res) => {
     try {
         const { exercise, code, history } = req.body;
@@ -43,9 +74,21 @@ app.post('/api/analyze-code', async (req, res) => {
     }
 });
 
+// Endpoint para chat
+app.post('/api/chat', async (req, res) => {
+    try {
+        const { history } = req.body;
+        const systemPrompt = `És um tutor de C respondendo dúvidas do aluno sobre o feedback anterior. Sê conciso e didático.`;
+        const userPrompt = JSON.stringify(history);
+        const responseText = await callGemini(systemPrompt, userPrompt, false);
+        res.json({ replyHtml: converter.makeHtml(responseText) });
+    } catch (error) {
+        console.error('Erro em /api/chat:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor a rodar na porta ${PORT}`);
 });
-
-
