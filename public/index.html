@@ -343,7 +343,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if(chatMessages) {
                 const bubble = document.createElement('div');
                 bubble.className = `chat-bubble ${role}`;
-                bubble.innerHTML = showdownConverter.makeHtml(message);
+                // Usar o converter global do showdown
+                const converter = new showdown.Converter();
+                bubble.innerHTML = converter.makeHtml(message);
                 chatMessages.appendChild(bubble);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
@@ -387,19 +389,38 @@ document.addEventListener('DOMContentLoaded', () => {
         // API CALLS
         async callApi(endpoint, body) {
             try {
+                
+                // Timeout de 45 segundos para requisições
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 45000);
+                
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
+                    body: JSON.stringify(body),
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
+                
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.error || 'Erro no servidor');
+                    throw new Error(errorData.error || `Erro HTTP ${response.status}`);
                 }
-                return await response.json();
+                
+                const result = await response.json();
+                return result;
             } catch (error) {
-                console.error(`Erro na chamada da API para ${endpoint}:`, error);
-                alert(`Ocorreu um erro: ${error.message}. Tente novamente.`);
+                console.error(`❌ Erro na chamada da API para ${endpoint}:`, error);
+                
+                let errorMessage = 'Erro desconhecido';
+                if (error.name === 'AbortError') {
+                    errorMessage = 'Timeout: A requisição demorou muito para responder. Verifique sua conexão.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                alert(`Ocorreu um erro: ${errorMessage}. Tente novamente.`);
                 return null;
             }
         },
@@ -407,42 +428,80 @@ document.addEventListener('DOMContentLoaded', () => {
         async generateExercise(topicName, difficulty = 'normal') {
             const button = document.querySelector(`.practice-button[data-topic="${topicName}"]`);
             if (button) this.setLoading(button, true, '');
-            else document.getElementById('next-step-container').innerHTML = `<div class="text-center font-bold">Gerando novo exercício...</div>`;
+            
+            const nextStepContainer = document.getElementById('next-step-container');
+            if (nextStepContainer) {
+                nextStepContainer.innerHTML = `<div class="text-center font-bold">Gerando novo exercício...</div>`;
+            }
 
             const data = await this.callApi('/api/generate-exercise', { topicName, difficulty });
 
             if (button) this.setLoading(button, false);
 
             if (data) {
-                document.getElementById('exercise-input').value = data.enunciado;
-                document.getElementById('code-input').value = data.prototipo || '';
-                document.getElementById('feedback-container').innerHTML = '';
-                document.getElementById('chat-container').classList.add('hidden');
-                document.getElementById('next-step-container').classList.add('hidden');
+                
+                // Limpar containers que podem existir
+                const feedbackContainer = document.getElementById('feedback-container');
+                const chatContainer = document.getElementById('chat-container');
+                if (feedbackContainer) feedbackContainer.innerHTML = '';
+                if (chatContainer) chatContainer.classList.add('hidden');
+                if (nextStepContainer) nextStepContainer.classList.add('hidden');
+                
                 this.conversationHistory = [];
-                this.lepeesSteps.forEach(step => {
-                    const el = document.getElementById(`lepees-${step.id}`);
-                    if (el) {
-                       if (step.type === 'checkbox') el.checked = false;
-                       else el.value = '';
-                    }
-                });
+                
+                // Primeiro mudar para a aba prática para renderizar os elementos
                 this.setActiveTab('pratica');
+                
+                // Aguardar um pouco para os elementos serem renderizados
+                setTimeout(() => {
+                    // Agora definir os valores nos elementos
+                    const exerciseInput = document.getElementById('exercise-input');
+                    const codeInput = document.getElementById('code-input');
+                    
+                    if (exerciseInput) {
+                        exerciseInput.value = data.enunciado || '';
+                    }
+                    if (codeInput) {
+                        codeInput.value = data.prototipo || '';
+                    }
+                    
+                    // Limpar campos LEPEEs
+                    this.lepeesSteps.forEach(step => {
+                        const el = document.getElementById(`lepees-${step.id}`);
+                        if (el) {
+                           if (step.type === 'checkbox') el.checked = false;
+                           else el.value = '';
+                        }
+                    });
+                }, 100);
             }
         },
 
         async analyzePlan() {
              const button = document.getElementById('analyze-plan-button');
+             if (!button) return;
+             
              this.setLoading(button, true, 'Analisando Plano...');
-             const exercise = document.getElementById('exercise-input').value.trim();
+             
+             const exerciseInput = document.getElementById('exercise-input');
+             if (!exerciseInput) {
+                 alert('Elemento não encontrado. Recarregue a página.');
+                 this.setLoading(button, false);
+                 return;
+             }
+             
+             const exercise = exerciseInput.value.trim();
              if (!exercise) {
                  alert('Por favor, cole o enunciado do exercício primeiro.');
                  this.setLoading(button, false);
                  return;
              }
+             
              const lepeesData = this.lepeesSteps.reduce((acc, step) => {
                  const el = document.getElementById(`lepees-${step.id}`);
-                 acc[step.id] = (step.type === 'checkbox') ? (el.checked ? "Sim, li o problema." : "Não marquei que li o problema.") : el.value.trim();
+                 if (el) {
+                     acc[step.id] = (step.type === 'checkbox') ? (el.checked ? "Sim, li o problema." : "Não marquei que li o problema.") : el.value.trim();
+                 }
                  return acc;
              }, {});
 
@@ -455,21 +514,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async analyzeCode() {
             const button = document.getElementById('analyze-code-button');
+            if (!button) return;
+            
             this.setLoading(button, true, 'Analisando Código...');
 
+            const exerciseInput = document.getElementById('exercise-input');
+            const codeInput = document.getElementById('code-input');
+            const chatContainer = document.getElementById('chat-container');
+            const chatMessages = document.getElementById('chat-messages');
+            const nextStepContainer = document.getElementById('next-step-container');
+            
+            if (!exerciseInput || !codeInput) {
+                alert('Elementos não encontrados. Recarregue a página.');
+                this.setLoading(button, false);
+                return;
+            }
+
             if (this.conversationHistory.length === 0) {
-                 document.getElementById('chat-container').classList.add('hidden');
-                 document.getElementById('chat-messages').innerHTML = '';
-                 document.getElementById('next-step-container').classList.add('hidden');
-                 this.conversationHistory.push({ role: 'user', parts: [{ text: `Exercício: "${document.getElementById('exercise-input').value.trim()}"` }] });
+                 if (chatContainer) chatContainer.classList.add('hidden');
+                 if (chatMessages) chatMessages.innerHTML = '';
+                 if (nextStepContainer) nextStepContainer.classList.add('hidden');
+                 this.conversationHistory.push({ role: 'user', parts: [{ text: `Exercício: "${exerciseInput.value.trim()}"` }] });
             }
             
-            const userPrompt = `Meu código (versão atual):\n\`\`\`c\n${document.getElementById('code-input').value.trim()}\n\`\`\`\n\nPor favor, analise-o novamente, considerando nosso histórico.`;
+            const userPrompt = `Meu código (versão atual):\n\`\`\`c\n${codeInput.value.trim()}\n\`\`\`\n\nPor favor, analise-o novamente, considerando nosso histórico.`;
             this.conversationHistory.push({ role: 'user', parts: [{ text: userPrompt }] });
 
             const data = await this.callApi('/api/analyze-code', { 
-                exercise: document.getElementById('exercise-input').value.trim(), 
-                code: document.getElementById('code-input').value.trim(),
+                exercise: exerciseInput.value.trim(), 
+                code: codeInput.value.trim(),
                 history: this.conversationHistory
             });
             this.setLoading(button, false);
@@ -478,7 +551,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(data) }] }); // Store raw response for context
                 const isCorrect = data.assessment.nextAction !== 'REDO';
                 this.renderFeedback(data.feedbackHtml, isCorrect ? 'green' : 'red');
-                document.getElementById('chat-container').classList.remove('hidden');
+                if (chatContainer) chatContainer.classList.remove('hidden');
                 this.renderNextStep(data.assessment);
 
                 if(isCorrect && data.assessment.topicId && this.progressData.hasOwnProperty(data.assessment.topicId)) {

@@ -11,6 +11,13 @@ const __dirname = path.resolve();
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Verificar se a API key está configurada
+if (!process.env.GEMINI_API_KEY) {
+    console.error('❌ GEMINI_API_KEY não está configurada!');
+    console.error('Configure a variável de ambiente GEMINI_API_KEY');
+    process.exit(1);
+}
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Função auxiliar para limpar JSON retornado pelo Gemini
@@ -26,15 +33,28 @@ function cleanJsonResponse(text) {
 }
 
 async function callGemini(systemPrompt, userPrompt, expectJson = true) {
-    const model = genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
-        systemInstruction: systemPrompt,
-    });
+    try {
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.5-flash",
+            systemInstruction: systemPrompt,
+        });
 
-    const generationConfig = expectJson ? { responseMimeType: "application/json" } : {};
-    const result = await model.generateContent(userPrompt, generationConfig);
-    const response = await result.response;
-    return response.text();
+        const generationConfig = expectJson ? { responseMimeType: "application/json" } : {};
+        
+        // Adicionar timeout de 30 segundos
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Timeout: Gemini API demorou mais de 30 segundos')), 30000);
+        });
+        
+        const apiPromise = model.generateContent(userPrompt, generationConfig);
+        const result = await Promise.race([apiPromise, timeoutPromise]);
+        
+        const response = await result.response;
+        return response.text();
+    } catch (error) {
+        console.error('❌ Erro na chamada Gemini API:', error.message);
+        throw error;
+    }
 }
 
 app.get('/', (req, res) => {
@@ -153,6 +173,10 @@ const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
 app.listen(PORT, HOST, () => {
-    console.log(`Servidor rodando em http://${HOST}:${PORT}`);
-    console.log(`Ambiente: ${process.env.NODE_ENV || 'development'}`);
+    console.log('🚀 ===== TUTOR INTELIGENTE DE C =====');
+    console.log(`✅ Servidor rodando em http://${HOST}:${PORT}`);
+    console.log(`📊 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔑 API Key configurada: ${process.env.GEMINI_API_KEY ? '✅ Sim' : '❌ Não'}`);
+    console.log('🌐 Acesse o navegador para começar a usar!');
+    console.log('=====================================');
 });
