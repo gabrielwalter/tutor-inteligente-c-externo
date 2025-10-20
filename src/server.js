@@ -2,12 +2,16 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const showdown = require('showdown');
-require('dotenv').config(); // Para carregar a chave da IA de forma segura
+const path = require('path'); // Ferramenta para lidar com caminhos de ficheiros
+require('dotenv').config(); 
 
 // Cria a aplicação do servidor
 const app = express();
-app.use(express.json()); // Permite que o servidor entenda JSON
-app.use(express.static('public')); // Serve arquivos estáticos (nosso index.html)
+app.use(express.json()); 
+
+// AQUI ESTÁ A CORREÇÃO PRINCIPAL:
+// Diz ao Express para usar a pasta 'public' para servir ficheiros estáticos como o index.html
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Instancia o conversor de Markdown
 const converter = new showdown.Converter();
@@ -32,7 +36,6 @@ app.post('/analyze', async (req, res) => {
 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-        // O SERVIDOR conversa com a IA
         const geminiResponse = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -51,7 +54,6 @@ app.post('/analyze', async (req, res) => {
         const responseText = geminiData.candidates[0].content.parts[0].text;
         const result = JSON.parse(responseText);
 
-        // O SERVIDOR envia o resultado formatado de volta para o front-end
         res.json({
             feedbackHtml: converter.makeHtml(result.feedback),
             isCorrect: result.isCorrect
