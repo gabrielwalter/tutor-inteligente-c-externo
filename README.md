@@ -1,11 +1,11 @@
 # 🎓 Tutor Inteligente de C
 
-Um sistema inteligente de tutoria para aprendizado de programação em C, desenvolvido com IA (Google Gemini) e integrando o método LEPEEs para resolução de problemas.
+Um sistema inteligente de tutoria para aprendizado de programação em C, desenvolvido com IA (Google Gemini) e integrando o método LEPEBES para resolução de problemas.
 
 ## 🚀 Funcionalidades
 
 - **Geração de Exercícios Personalizados**: Cria exercícios baseados em tópicos específicos de C
-- **Método LEPEEs Integrado**: Sistema de planejamento estruturado (Ler, Entender, Português, Estruturas, Esqueleto)
+- **Método LEPEBES Integrado**: Sistema de planejamento estruturado (Ler, Entender, Português, Estruturas, Britney Spears, Esqueleto)
 - **Análise de Código com IA**: Feedback inteligente sobre o código do estudante
 - **Chat Interativo**: Conversa sobre feedback e dúvidas
 - **Sistema de Progresso**: Acompanhamento do aprendizado por tópicos
@@ -72,16 +72,17 @@ GEMINI_API_KEY=AIzaSyAquiVaiSuaChaveCompleta123456789
 - Escolha um tópico de programação
 - Clique em **"Praticar"** para gerar um exercício personalizado
 
-### 2. Método LEPEEs
-- Na aba **"Prática"**, preencha cada etapa do LEPEEs:
+### 2. Método LEPEBES
+- Na aba **"Prática"**, preencha cada etapa do LEPEBES:
   - **L**: Ler o problema
   - **E**: Entender entradas, saídas e regras
   - **P**: Português (pseudocódigo)
   - **E**: Estruturas (variáveis, if, loop, função)
+  - **B**: Britney Spears (respirar fundo e se acalmar)
   - **Es**: Esqueleto (código em C)
 
 ### 3. Análise de Código
-- Após planejar com LEPEEs, escreva seu código
+- Após planejar com LEPEBES, escreva seu código
 - Clique em **"Analisar Código"** para receber feedback da IA
 - Use o chat para esclarecer dúvidas sobre o feedback
 
@@ -124,14 +125,15 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-## 🎓 Método LEPEEs
+## 🎓 Método LEPEBES
 
-O método LEPEEs é uma abordagem estruturada para resolução de problemas de programação:
+O método LEPEBES é uma abordagem estruturada para resolução de problemas de programação:
 
 - **L** - **Ler**: Leia cuidadosamente o enunciado
 - **E** - **Entender**: Identifique entradas, saídas e regras
 - **P** - **Português**: Escreva o algoritmo em português
 - **E** - **Estruturas**: Defina variáveis, estruturas condicionais e loops
+- **B** - **Britney Spears**: Respire fundo e se acalme (como Britney nos ensinou)
 - **Es** - **Esqueleto**: Implemente o código em C
 
 Este método ajuda estudantes a desenvolver uma abordagem sistemática para resolver problemas de programação.
