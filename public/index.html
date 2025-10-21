@@ -20,7 +20,6 @@
             font-family: 'Fira Code', monospace; 
         }
         
-        /* Estilos das abas melhorados */
         .tab-button {
             position: relative;
             overflow: hidden;
@@ -52,14 +51,12 @@
             border-radius: 2px;
         }
         
-        /* Container das abas */
         .tab-container {
             background: white;
             border-radius: 16px 16px 0 0;
             box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
         }
         
-        /* Conteúdo das abas */
         .tab-content {
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
             border-radius: 0 0 16px 16px;
@@ -101,7 +98,6 @@
             box-shadow: 0 2px 8px rgba(91, 33, 182, 0.2);
         }
         
-        /* Estilos para o vídeo profissional */
         .video-container {
             position: relative;
             border-radius: 20px;
@@ -152,7 +148,6 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        /* Estilo para o vídeo com autoplay */
         .hero-video {
             position: relative;
         }
@@ -165,20 +160,6 @@
             transform: scale(1.02);
         }
 
-        /* Cards com gradientes */
-        .gradient-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .gradient-card-blue {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .gradient-card-green {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-        }
-
-        /* Inputs melhorados */
         .modern-input {
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
             border: 2px solid #e2e8f0;
@@ -188,9 +169,9 @@
         .modern-input:focus {
             border-color: #6d28d9;
             box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+            outline: none;
         }
 
-        /* Botões melhorados */
         .modern-button {
             background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
             transition: all 0.3s ease;
@@ -201,17 +182,34 @@
             transform: translateY(-1px);
             box-shadow: 0 10px 25px rgba(109, 40, 217, 0.3);
         }
+
+        .chat-bubble {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin: 8px 0;
+            max-width: 80%;
+        }
+
+        .chat-bubble.user {
+            background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-bubble.model {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
     <div id="app" class="max-w-6xl mx-auto">
-        <!-- HEADER -->
         <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
              <div class="flex items-center gap-4 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-violet-600"><path d="M15 14c.2-1 .7-1.7 1.5-2.5C17.3 10.7 18 9.9 18 9c0-.9-.4-1.8-1-2.4c-.9-.8-2-1.3-3.3-1.5c-.5-.1-.9.4-.8.9c.1.4.5.7.9.8c.8.2 1.5.6 2.1 1.2c.4.4.6 1 .6 1.6c0 .5-.2 1-.8 1.5c-.7.6-1.2 1.2-1.4 2.2c-.2.7.3 1.3.9 1.3h.2c.8 0 1.2-.8 1-1.5z"/><path d="M9 14c-.2-1-.7-1.7-1.5-2.5C6.7 10.7 6 9.9 6 9c0-.9.4-1.8 1-2.4c.9-.8 2-1.3 3.3-1.5c.5-.1.9.4.8.9c-.1.4-.5.7-.9.8c-.8.2-1.5.6-2.1 1.2c-.4.4-.6 1-.6 1.6c0 .5.2 1 .8 1.5c.7.6 1.2 1.2 1.4 2.2c.2.7-.3 1.3-.9 1.3H9c-.8 0-1.2-.8-1-1.5z"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/></svg>
+			 <span style="font-size: 40px; color: purple;">👧</span>
                 <div>
                     <h1 class="text-3xl font-bold text-gray-800">Britney can C you!</h1>
-                    <p class="text-gray-600">Método LEPEBES para provas, criado por gabrielhando para todos, todas e tads :)</p>
+                    <p class="text-gray-600">Preacher, preacher, I'm the teacher, you can learn... Watch your fingers, boy, you might get burned!</p>
                 </div>
             </div>
              <div class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-lg p-4">
@@ -228,11 +226,13 @@
             </div>
         </div>
 
-        <!-- NAVIGATION -->
         <div class="bg-white rounded-xl shadow-lg mb-6 overflow-hidden tab-container">
             <div class="flex flex-wrap border-b border-gray-100">
                 <button data-tab="inicio" class="tab-button flex items-center gap-2 px-6 py-4 font-semibold transition-all text-gray-600 hover:bg-gray-50 tab-active">
                     <span>🏠</span> Início
+                </button>
+                <button data-tab="exemplo" class="tab-button flex items-center gap-2 px-6 py-4 font-semibold transition-all text-gray-600 hover:bg-gray-50">
+                    <span>📖</span> Exemplo LEPEBES
                 </button>
                 <button data-tab="trilha" class="tab-button flex items-center gap-2 px-6 py-4 font-semibold transition-all text-gray-600 hover:bg-gray-50">
                     <span>📚</span> Trilha
@@ -246,6 +246,7 @@
             </div>
             <div class="p-6 tab-content">
                 <div id="inicio-view" class="view view-active space-y-6"></div>
+                <div id="exemplo-view" class="view space-y-6"></div>
                 <div id="trilha-view" class="view space-y-6"></div>
                 <div id="pratica-view" class="view space-y-4"></div>
                 <div id="progresso-view" class="view"></div>
@@ -256,12 +257,12 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const app = {
-        // STATE
         activeTab: 'inicio',
         isAnalyzing: false,
         examDate: new Date('2025-11-03'),
         conversationHistory: [],
         progressData: {},
+        lepebesExampleStep: 0,
         topics: {
             p1: [
                 { id: 'estruturasCondicionais', nome: 'Estruturas Condicionais', urgencia: 'alta' },
@@ -282,19 +283,74 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'entender', label: 'E', title: 'Entender (entradas, saídas, regras)', type: 'textarea' },
             { id: 'portugues', label: 'P', title: 'Português (pseudocódigo linha por linha)', type: 'textarea' },
             { id: 'estrutura', label: 'E', title: 'Estrutura (variáveis, if, loop, função)', type: 'textarea' },
-            { id: 'britney', label: 'B', title: 'Britney Spears (respire fundo e se acalme)', type: 'checkbox' },
+            { id: 'britney', label: 'B', title: 'Britney Spears (eterna princesa do pop)', type: 'checkbox' },
             { id: 'esqueleto', label: 'Es', title: 'Esqueleto (em C)', type: 'textarea' }
         ],
+        lepebesExample: [
+            {
+                letter: 'L',
+                title: 'Ler',
+                problem: 'Escreva um programa que leia N números e imprima quantos são pares.',
+                content: '📖 Primeiro, leia TODO o enunciado com atenção. Não pule partes!',
+                action: '✅ Li o problema completo'
+            },
+            {
+                letter: 'E',
+                title: 'Entender',
+                content: `**Entradas:**<br>- Um número inteiro N (quantidade de números)<br>- N números inteiros<br><br>**Saídas:**<br>- Um número inteiro (quantidade de pares)<br><br>**Regras:**<br>- Número par: divisível por 2 (resto da divisão por 2 é 0)<br>- Preciso contar, não imprimir os números pares`,
+                highlight: 'Separar claramente: O QUE entra → O QUE sai → COMO processar'
+            },
+            {
+                letter: 'P',
+                title: 'Português',
+                content: `**Pseudocódigo linha por linha:**<br><br>1. Ler quantidade N de números<br>2. Criar contador de pares (começa em 0)<br>3. Para cada número de 1 até N:<br>&nbsp;&nbsp;&nbsp;- Ler o número atual<br>&nbsp;&nbsp;&nbsp;- Se o número é divisível por 2:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Aumentar contador em 1<br>4. Imprimir o contador`,
+                highlight: 'Português PURO, não "código disfarçado"!'
+            },
+            {
+                letter: 'E',
+                title: 'Estrutura',
+                content: `**Variáveis:**<br>- <code>int n</code> - quantidade de números<br>- <code>int numero</code> - número atual sendo lido<br>- <code>int contador_pares</code> - conta quantos pares<br>- <code>int i</code> - controle do loop<br><br>**Estruturas:**<br>- Loop FOR (de 1 até n)<br>- IF (para verificar se é par)<br><br>**Operadores:**<br>- <code>%</code> (módulo) para verificar divisibilidade`,
+                highlight: 'Definir TIPOS das variáveis e QUAIS estruturas usar'
+            },
+            {
+                letter: 'B',
+                title: 'Britney Spears',
+                content: `🎤 "...Baby One More Time" 🎵<br><br>Respire fundo!<br>Você planejou tudo.<br>Agora é só transformar em código.<br><br>💜 Lembre-se: Todo programador comete erros.<br>O importante é o processo de raciocínio!`,
+                highlight: 'Momento de descontração antes de codificar ✨'
+            },
+            {
+                letter: 'Es',
+                title: 'Esqueleto',
+                content: `<pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto"><code>#include &lt;stdio.h&gt;
 
-        // DOM ELEMENTS
+int main() {
+    int n, numero, contador_pares = 0;
+    
+    scanf("%d", &n);
+    
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &numero);
+        if (numero % 2 == 0) {
+            contador_pares++;
+        }
+    }
+    
+    printf("%d\\n", contador_pares);
+    
+    return 0;
+}</code></pre>`,
+                highlight: 'Traduzir o plano em código C!'
+            }
+        ],
+
         elements: {},
 
-        // INITIALIZATION
         init() {
             this.elements = {
                 tabButtons: document.querySelectorAll('.tab-button'),
                 views: {
                     inicio: document.getElementById('inicio-view'),
+                    exemplo: document.getElementById('exemplo-view'),
                     trilha: document.getElementById('trilha-view'),
                     pratica: document.getElementById('pratica-view'),
                     progresso: document.getElementById('progresso-view'),
@@ -309,14 +365,12 @@ document.addEventListener('DOMContentLoaded', () => {
             this.updateCountdown();
         },
 
-        // EVENT LISTENERS
         setupEventListeners() {
             this.elements.tabButtons.forEach(button => {
                 button.addEventListener('click', () => this.setActiveTab(button.dataset.tab));
             });
         },
         
-        // DATE & COUNTDOWN
         updateDate() {
             const today = new Date();
             this.elements.dateDisplay.textContent = today.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -337,7 +391,6 @@ document.addEventListener('DOMContentLoaded', () => {
             this.elements.examCountdown.textContent = message;
         },
 
-        // STATE MANAGEMENT
         setActiveTab(tabId) {
             this.activeTab = tabId;
             this.render();
@@ -348,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalText = button.dataset.originalText || button.innerHTML;
             if (isLoading) {
                 button.dataset.originalText = originalText;
-                button.innerHTML = `<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> ${text}`;
+                button.innerHTML = `<div class="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div> ${text}`;
             } else {
                 button.innerHTML = originalText;
             }
@@ -368,7 +421,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         },
 
-        // RENDERING
         render() {
             Object.values(this.elements.views).forEach(view => view.style.display = 'none');
             this.elements.views[this.activeTab].style.display = 'block';
@@ -380,14 +432,100 @@ document.addEventListener('DOMContentLoaded', () => {
             this[`render_${this.activeTab}`]();
         },
         
+        render_exemplo() {
+            const step = this.lepebesExample[this.lepebesExampleStep];
+            const totalSteps = this.lepebesExample.length;
+            
+            this.elements.views.exemplo.innerHTML = `
+                <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl p-6 mb-6">
+                    <h2 class="text-3xl font-bold mb-2">Exemplo LEPEBES Completo</h2>
+                    <p class="text-lg">Veja como resolver um problema passo a passo</p>
+                </div>
+
+                <div class="mb-8">
+                    <div class="flex justify-between mb-2">
+                        ${this.lepebesExample.map((s, idx) => `
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg transition-all ${
+                                idx === this.lepebesExampleStep
+                                    ? 'bg-purple-600 text-white scale-110'
+                                    : idx < this.lepebesExampleStep
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-gray-200 text-gray-500'
+                            }">${s.letter}</div>
+                        `).join('')}
+                    </div>
+                    <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-500" 
+                             style="width: ${((this.lepebesExampleStep + 1) / totalSteps) * 100}%"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                    ${step.problem ? `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
+                            <p class="font-bold text-blue-900 mb-2">📝 Problema:</p>
+                            <p class="text-blue-800">${step.problem}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold text-2xl">
+                            ${step.letter}
+                        </div>
+                        <div class="flex-1">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-2">${step.title}</h2>
+                            ${step.action ? `<p class="text-green-600 font-semibold">${step.action}</p>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="prose max-w-none">
+                        <div class="text-gray-700 leading-relaxed">${step.content}</div>
+                    </div>
+
+                    ${step.highlight ? `
+                        <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                            <p class="text-yellow-900"><span class="font-bold">💡 Dica:</span> ${step.highlight}</p>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="flex justify-between">
+                    <button id="prev-step" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors ${this.lepebesExampleStep === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
+                        ← Anterior
+                    </button>
+                    
+                    <span class="text-gray-600 font-semibold self-center">
+                        Passo ${this.lepebesExampleStep + 1} de ${totalSteps}
+                    </span>
+                    
+                    <button id="next-step" class="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors ${this.lepebesExampleStep === totalSteps - 1 ? 'opacity-50 cursor-not-allowed' : ''}">
+                        Próximo →
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('prev-step').addEventListener('click', () => {
+                if (this.lepebesExampleStep > 0) {
+                    this.lepebesExampleStep--;
+                    this.render();
+                }
+            });
+
+            document.getElementById('next-step').addEventListener('click', () => {
+                if (this.lepebesExampleStep < totalSteps - 1) {
+                    this.lepebesExampleStep++;
+                    this.render();
+                }
+            });
+        },
+        
         render_inicio() {
             this.elements.views.inicio.innerHTML = `
-                <!-- Hero Section com Vídeo -->
                 <div class="hero-gradient rounded-2xl p-8 text-white mb-8">
                     <div class="grid md:grid-cols-2 gap-8 items-center">
                         <div>
-                            <h2 class="text-4xl font-bold mb-4">Bem-vindo</h2>
-                            <p class="text-lg mb-6 opacity-90">Aprenda programação C de forma inteligente e estruturada com o método LEPEBES, uma acrônimo que inventei para estudar para a prova em vez de estudar para a prova. Que minha procrastinação sirva para algo!</p>
+                            <h2 class="text-4xl font-bold mb-4">... I am glad you came!</h2>
+                            <p class="text-lg mb-6 opacity-90">Aprenda programação C de forma inteligente e estruturada com o método LEPEBES!</p>
                             <div class="flex flex-wrap gap-3">
                                 <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                                     <span class="font-semibold">✨ IA Personalizada</span>
@@ -404,7 +542,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                         </div>
                         
-                        <!-- Container do Vídeo com Poster da Britney e Autoplay -->
                         <div class="video-container hero-video">
                             <div class="video-inner">
                                 <video id="hero-video" class="w-full aspect-video object-cover" 
@@ -425,7 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
-                <!-- Features Cards -->
                 <div class="grid md:grid-cols-3 gap-6 mb-8">
                     <div class="feature-card rounded-xl p-6 shadow-lg border-l-4 border-violet-500">
                         <div class="flex items-center mb-4">
@@ -436,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <h3 class="text-xl font-bold text-gray-800">Método LEPEBES</h3>
                         </div>
-                        <p class="text-gray-600">Estruture seu raciocínio com o acrônimo: <strong>Ler, Entender, Português, Estrutura, Esqueleto</strong>.</p>
+                        <p class="text-gray-600">Estruture seu raciocínio com: <strong>Ler, Entender, Português, Estrutura, Britney, Esqueleto</strong>.</p>
                     </div>
 
                     <div class="feature-card rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
@@ -446,9 +582,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800">IA Personalizada</h3>
+                            <h3 class="text-xl font-bold text-gray-800">IA Pedagógica</h3>
                         </div>
-                        <p class="text-gray-600">Feedback inteligente e exercícios gerados especificamente para suas necessidades e nível de conhecimento.</p>
+                        <p class="text-gray-600">Feedback que identifica o tipo de erro e sugere correções personalizadas. Oops, I will do it again...</p>
                     </div>
 
                     <div class="feature-card rounded-xl p-6 shadow-lg border-l-4 border-green-500">
@@ -460,20 +596,29 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <h3 class="text-xl font-bold text-gray-800">Progresso Visual</h3>
                         </div>
-                        <p class="text-gray-600">Monitore seu progresso em tempo real com estatísticas detalhadas de cada tópico estudado.</p>
+                        <p class="text-gray-600">Monitore seu progresso com estatísticas detalhadas de cada tópico. Got you on my radar...</p>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
                 <div class="bg-violet-50 border-l-4 border-violet-500 rounded-lg p-6 mb-6">
                     <h3 class="font-bold text-violet-900 mb-4 text-lg">🚀 Ações Rápidas</h3>
-                    <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="grid sm:grid-cols-3 gap-4">
+                        <button onclick="app.setActiveTab('exemplo')" class="quick-action-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-lg transition-all text-left">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-4">📖</span>
+                                <div>
+                                    <div class="font-bold text-lg">Ver Exemplo</div>
+                                    <div class="text-sm opacity-90">Aprenda o método passo a passo</div>
+                                </div>
+                            </div>
+                        </button>
+
                         <button onclick="app.setActiveTab('trilha')" class="quick-action-btn bg-violet-600 hover:bg-violet-700 text-white font-bold py-4 px-6 rounded-lg transition-all text-left">
                             <div class="flex items-center">
                                 <span class="text-2xl mr-4">📚</span>
                                 <div>
-                                    <div class="font-bold text-lg">Iniciar Trilha de Estudos</div>
-                                    <div class="text-sm opacity-90">Explore tópicos e gere exercícios personalizados</div>
+                                    <div class="font-bold text-lg">Trilha de Estudos</div>
+                                    <div class="text-sm opacity-90">Exercícios personalizados</div>
                                 </div>
                             </div>
                         </button>
@@ -482,15 +627,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="flex items-center">
                                 <span class="text-2xl mr-4">💻</span>
                                 <div>
-                                    <div class="font-bold text-lg">Praticar com LEPEBES</div>
-                                    <div class="text-sm opacity-90">Use uma metodologia estruturada</div>
+                                    <div class="font-bold text-lg">Praticar</div>
+                                    <div class="text-sm opacity-90">Use o LEPEBES agora</div>
                                 </div>
                             </div>
                         </button>
                     </div>
                 </div>
 
-                <!-- LEPEBES Method Explanation -->
                 <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
                     <h3 class="text-xl font-bold text-gray-800 mb-4">💡 Como Funciona o Método LEPEBES?</h3>
                     <div class="grid md:grid-cols-6 gap-4">
@@ -517,7 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="text-center p-4 bg-pink-50 rounded-lg">
                             <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); color: #831843;">B</div>
                             <h4 class="font-bold text-sm">Britney Spears</h4>
-                            <p class="text-xs text-gray-600">respire fundo! 🎤</p>
+                            <p class="text-xs text-gray-600">oh, baby, baby...</p>
                         </div>
                         <div class="text-center p-4 bg-red-50 rounded-lg">
                             <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b;">Es</div>
@@ -527,10 +671,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
-                <!-- Colab Integration -->
                 <div class="bg-orange-50 border-l-4 border-orange-500 rounded-lg p-6">
                     <h3 class="font-bold text-orange-900 mb-3 text-lg">🔧 Ambiente de Desenvolvimento</h3>
-                    <p class="text-orange-800 mb-4">Compile e teste seus códigos diretamente no Google Colab, utilizando "!" nas células para executar.</p>
+                    <p class="text-orange-800 mb-4">Compile e teste seus códigos diretamente no Google Colab.</p>
                     <a href="https://colab.research.google.com/" target="_blank" class="inline-flex items-center bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
@@ -540,25 +683,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // Configurar autoplay robusto do vídeo
             setTimeout(() => {
                 const video = document.getElementById('hero-video');
                 if (video) {
-                    // Tentar fazer autoplay
                     video.play().catch(err => {
-                        console.log('Autoplay bloqueado pelo navegador. Mostrando poster da Britney.');
-                        // Se autoplay falhar, o poster da Britney fica visível
+                        console.log('Autoplay bloqueado. Mostrando poster da Britney.');
                     });
 
-                    // Adicionar evento para unmute quando usuário clicar
                     video.addEventListener('click', () => {
                         if (video.muted) {
                             video.muted = false;
-                            video.volume = 0.5; // Volume médio
+                            video.volume = 0.5;
                         }
                     });
 
-                    // Mostrar dica de áudio quando hover
                     video.addEventListener('mouseenter', () => {
                         if (video.muted && !video.paused) {
                             video.title = 'Clique para ativar o áudio';
@@ -634,7 +772,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 <div class="bg-white border-2 border-gray-200 rounded-lg p-4">
                     <label class="block font-bold text-gray-800 mb-2">💻 Seu Código C:</label>
-                    <textarea id="code-input" placeholder="Após a análise do plano, escreva seu código aqui..." class="w-full h-56 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500 font-mono text-sm modern-input"></textarea>
+                    <textarea id="code-input" placeholder="Após a análise do plano, escreva seu código aqui... I need to make mistakes just to learn who I am" class="w-full h-56 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500 font-mono text-sm modern-input"></textarea>
                 </div>
                 <button id="analyze-code-button" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-3 text-lg transition-all">Analisar Código</button>
                 
@@ -649,7 +787,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            // Re-attach listeners for dynamically created elements
             document.getElementById('analyze-plan-button').addEventListener('click', () => this.analyzePlan());
             document.getElementById('analyze-code-button').addEventListener('click', () => this.analyzeCode());
             document.getElementById('chat-send-button').addEventListener('click', () => this.sendChatMessage());
@@ -680,18 +817,270 @@ document.addEventListener('DOMContentLoaded', () => {
         
         render_progresso() {
             const allTopics = [...this.topics.p1, ...this.topics.p2];
-            this.elements.views.progresso.innerHTML = allTopics.map(topic => {
-                const progress = this.progressData[topic.id] || 0;
-                return `<div class="bg-white border-2 border-gray-200 rounded-lg p-4 mb-4">
-                            <div class="flex justify-between mb-2">
-                                <h4 class="font-bold">${topic.nome}</h4>
-                                <span class="text-sm font-semibold">${progress}%</span>
+            
+            // Calcular estatísticas
+            const totalTopics = allTopics.length;
+            const progressValues = allTopics.map(t => this.progressData[t.id] || 0);
+            const averageProgress = Math.round(progressValues.reduce((a, b) => a + b, 0) / totalTopics);
+            const completedTopics = progressValues.filter(p => p === 100).length;
+            const inProgressTopics = progressValues.filter(p => p > 0 && p < 100).length;
+            const notStartedTopics = progressValues.filter(p => p === 0).length;
+            
+            // Encontrar melhor e pior tópico
+            const maxProgress = Math.max(...progressValues);
+            const minProgress = Math.min(...progressValues.filter(p => p > 0));
+            const bestTopic = allTopics.find(t => (this.progressData[t.id] || 0) === maxProgress);
+            const weakestTopic = allTopics.find(t => (this.progressData[t.id] || 0) === minProgress && minProgress > 0);
+            
+            this.elements.views.progresso.innerHTML = `
+                <!-- Header do Dashboard -->
+                <div class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl p-6 mb-6">
+                    <h2 class="text-3xl font-bold mb-2">📊 Seu Progresso</h2>
+                    <p class="text-lg opacity-90">Acompanhe sua evolução no método LEPEBES</p>
+                </div>
+
+                <!-- Cards de Estatísticas -->
+                <div class="grid md:grid-cols-4 gap-4 mb-6">
+                    <!-- Card 1: Progresso Geral -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-violet-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-600 font-semibold">Progresso Geral</span>
+                            <span class="text-3xl">📈</span>
+                        </div>
+                        <div class="text-4xl font-bold text-violet-600">${averageProgress}%</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-3">
+                            <div class="bg-gradient-to-r from-violet-500 to-indigo-500 h-2 rounded-full transition-all duration-500" style="width: ${averageProgress}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Tópicos Completos -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-600 font-semibold">Completos</span>
+                            <span class="text-3xl">✅</span>
+                        </div>
+                        <div class="text-4xl font-bold text-green-600">${completedTopics}</div>
+                        <div class="text-sm text-gray-500 mt-1">de ${totalTopics} tópicos</div>
+                    </div>
+
+                    <!-- Card 3: Em Progresso -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-600 font-semibold">Em Progresso</span>
+                            <span class="text-3xl">🔄</span>
+                        </div>
+                        <div class="text-4xl font-bold text-yellow-600">${inProgressTopics}</div>
+                        <div class="text-sm text-gray-500 mt-1">tópicos ativos</div>
+                    </div>
+
+                    <!-- Card 4: Não Iniciados -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-gray-400">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-gray-600 font-semibold">Não Iniciados</span>
+                            <span class="text-3xl">⏸️</span>
+                        </div>
+                        <div class="text-4xl font-bold text-gray-600">${notStartedTopics}</div>
+                        <div class="text-sm text-gray-500 mt-1">aguardando</div>
+                    </div>
+                </div>
+
+                <!-- Destaques -->
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <!-- Ponto Forte -->
+                    ${bestTopic && maxProgress > 0 ? `
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-4xl">💪</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Seu Ponto Forte</h3>
+                                <p class="text-sm text-gray-600">Continue assim!</p>
                             </div>
-                            <div class="w-full bg-gray-200 rounded-full h-3">
-                                <div class="bg-gradient-to-r from-violet-500 to-indigo-500 h-3 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                        </div>
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                            <p class="font-bold text-green-900 text-lg">${bestTopic.nome}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <div class="flex-1 bg-green-200 rounded-full h-3">
+                                    <div class="bg-green-500 h-3 rounded-full" style="width: ${maxProgress}%"></div>
+                                </div>
+                                <span class="font-bold text-green-700">${maxProgress}%</span>
                             </div>
-                        </div>`;
-            }).join('');
+                        </div>
+                    </div>
+                    ` : `
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-4xl">💪</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Seu Ponto Forte</h3>
+                                <p class="text-sm text-gray-600">Ainda não começou</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 border-l-4 border-gray-300 p-4 rounded text-center">
+                            <p class="text-gray-600">Resolva exercícios para ver suas conquistas!</p>
+                        </div>
+                    </div>
+                    `}
+
+                    <!-- Ponto Fraco -->
+                    ${weakestTopic && minProgress > 0 ? `
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-4xl">🎯</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Foco de Melhoria</h3>
+                                <p class="text-sm text-gray-600">Pratique mais este tópico</p>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded">
+                            <p class="font-bold text-orange-900 text-lg">${weakestTopic.nome}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <div class="flex-1 bg-orange-200 rounded-full h-3">
+                                    <div class="bg-orange-500 h-3 rounded-full" style="width: ${minProgress}%"></div>
+                                </div>
+                                <span class="font-bold text-orange-700">${minProgress}%</span>
+                            </div>
+                            <button onclick="app.setActiveTab('trilha')" class="mt-3 w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                                Praticar Agora
+                            </button>
+                        </div>
+                    </div>
+                    ` : `
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-4xl">🎯</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Foco de Melhoria</h3>
+                                <p class="text-sm text-gray-600">Continue praticando</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 border-l-4 border-gray-300 p-4 rounded text-center">
+                            <p class="text-gray-600">Resolva mais exercícios para identificar pontos fracos!</p>
+                        </div>
+                    </div>
+                    `}
+                </div>
+
+                <!-- Lista Detalhada de Tópicos -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">📚 Progresso por Tópico</h3>
+                    
+                    <!-- P1 -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold text-gray-700 mb-3 flex items-center gap-2">
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">P1</span>
+                            Nivelamento
+                        </h4>
+                        <div class="space-y-3">
+                            ${this.topics.p1.map(topic => {
+                                const progress = this.progressData[topic.id] || 0;
+                                let statusColor = 'gray';
+                                let statusIcon = '⏸️';
+                                let statusText = 'Não iniciado';
+                                
+                                if (progress === 100) {
+                                    statusColor = 'green';
+                                    statusIcon = '✅';
+                                    statusText = 'Completo';
+                                } else if (progress >= 75) {
+                                    statusColor = 'blue';
+                                    statusIcon = '🔵';
+                                    statusText = 'Quase lá';
+                                } else if (progress >= 50) {
+                                    statusColor = 'yellow';
+                                    statusIcon = '🟡';
+                                    statusText = 'Progredindo';
+                                } else if (progress > 0) {
+                                    statusColor = 'orange';
+                                    statusIcon = '🟠';
+                                    statusText = 'Iniciado';
+                                }
+                                
+                                return `
+                                    <div class="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-2xl">${statusIcon}</span>
+                                                <div>
+                                                    <h5 class="font-bold text-gray-800">${topic.nome}</h5>
+                                                    <span class="text-xs text-${statusColor}-600 font-semibold">${statusText}</span>
+                                                </div>
+                                            </div>
+                                            <span class="text-2xl font-bold text-${statusColor}-600">${progress}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-gradient-to-r from-${statusColor}-400 to-${statusColor}-600 h-3 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <!-- P2 -->
+                    <div>
+                        <h4 class="text-lg font-bold text-gray-700 mb-3 flex items-center gap-2">
+                            <span class="bg-violet-100 text-violet-800 px-3 py-1 rounded-full text-sm">P2</span>
+                            Foco Principal
+                        </h4>
+                        <div class="space-y-3">
+                            ${this.topics.p2.map(topic => {
+                                const progress = this.progressData[topic.id] || 0;
+                                let statusColor = 'gray';
+                                let statusIcon = '⏸️';
+                                let statusText = 'Não iniciado';
+                                
+                                if (progress === 100) {
+                                    statusColor = 'green';
+                                    statusIcon = '✅';
+                                    statusText = 'Completo';
+                                } else if (progress >= 75) {
+                                    statusColor = 'blue';
+                                    statusIcon = '🔵';
+                                    statusText = 'Quase lá';
+                                } else if (progress >= 50) {
+                                    statusColor = 'yellow';
+                                    statusIcon = '🟡';
+                                    statusText = 'Progredindo';
+                                } else if (progress > 0) {
+                                    statusColor = 'orange';
+                                    statusIcon = '🟠';
+                                    statusText = 'Iniciado';
+                                }
+                                
+                                return `
+                                    <div class="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <div class="flex items-center gap-3">
+                                                <span class="text-2xl">${statusIcon}</span>
+                                                <div>
+                                                    <h5 class="font-bold text-gray-800">${topic.nome}</h5>
+                                                    <span class="text-xs text-${statusColor}-600 font-semibold">${statusText}</span>
+                                                </div>
+                                            </div>
+                                            <span class="text-2xl font-bold text-${statusColor}-600">${progress}%</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-3">
+                                            <div class="bg-gradient-to-r from-${statusColor}-400 to-${statusColor}-600 h-3 rounded-full transition-all duration-500" style="width: ${progress}%"></div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Motivação -->
+                <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl p-6 mt-6 text-center">
+                    <span class="text-5xl mb-3 block">🧑‍💻</span>
+                    <h3 class="text-2xl font-bold mb-2">Continue assim!</h3>
+                    <p class="text-lg opacity-90">
+                        ${averageProgress === 0 ? 'Comece sua jornada agora! Na sua idade, Britney Spears já era milionária! 💜' : 
+                          averageProgress < 50 ? 'You want a hot body? You want a Bugatti? You want a Maserati? You better work, bitch …' :
+                          averageProgress < 100 ? 'Stronger than yesterday!' :
+                          'IT IS BRITNEY, B*TCH! Você dominou tudo! Just like a circus! 🎪'}
+                    </p>
+                </div>
+            `;
         },
 
         renderFeedback(htmlContent, color = 'gray') {
@@ -710,7 +1099,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if(chatMessages) {
                 const bubble = document.createElement('div');
                 bubble.className = `chat-bubble ${role}`;
-                // Usar o converter global do showdown
                 const converter = new showdown.Converter();
                 bubble.innerHTML = converter.makeHtml(message);
                 chatMessages.appendChild(bubble);
@@ -747,17 +1135,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const btn_proceed = document.createElement('button');
                     btn_proceed.className = 'w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg mt-2 transition-colors';
                     btn_proceed.textContent = 'Gerar Próximo Exercício (Nível Acima)';
-                    btn_proceed.onclick = () => this.generateExercise(assessment.topicName, 'dificil');
+                    btn_proceed.onclick = () => this.generateExercise(assessment.topicName, 'hard');
                     container.appendChild(btn_proceed);
                 }
             }
         },
         
-        // API CALLS
         async callApi(endpoint, body) {
             try {
-                
-                // Timeout de 45 segundos para requisições
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 45000);
                 
@@ -778,11 +1163,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
                 return result;
             } catch (error) {
-                console.error(`❌ Erro na chamada da API para ${endpoint}:`, error);
+                console.error(`Erro na chamada da API para ${endpoint}:`, error);
                 
                 let errorMessage = 'Erro desconhecido';
                 if (error.name === 'AbortError') {
-                    errorMessage = 'Timeout: A requisição demorou muito para responder. Verifique sua conexão.';
+                    errorMessage = 'Timeout: A requisição demorou muito para responder.';
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
@@ -794,7 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         async generateExercise(topicName, difficulty = 'normal') {
             const button = document.querySelector(`.practice-button[data-topic="${topicName}"]`);
-            if (button) this.setLoading(button, true, '');
+            if (button) this.setLoading(button, true, 'Gerando...');
             
             const nextStepContainer = document.getElementById('next-step-container');
             if (nextStepContainer) {
@@ -806,8 +1191,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (button) this.setLoading(button, false);
 
             if (data) {
-                
-                // Limpar containers que podem existir
                 const feedbackContainer = document.getElementById('feedback-container');
                 const chatContainer = document.getElementById('chat-container');
                 if (feedbackContainer) feedbackContainer.innerHTML = '';
@@ -815,24 +1198,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nextStepContainer) nextStepContainer.classList.add('hidden');
                 
                 this.conversationHistory = [];
-                
-                // Primeiro mudar para a aba prática para renderizar os elementos
                 this.setActiveTab('pratica');
                 
-                // Aguardar um pouco para os elementos serem renderizados
                 setTimeout(() => {
-                    // Agora definir os valores nos elementos
                     const exerciseInput = document.getElementById('exercise-input');
                     const codeInput = document.getElementById('code-input');
                     
-                    if (exerciseInput) {
-                        exerciseInput.value = data.enunciado || '';
-                    }
-                    if (codeInput) {
-                        codeInput.value = data.prototipo || '';
-                    }
+                    if (exerciseInput) exerciseInput.value = data.enunciado || '';
+                    if (codeInput) codeInput.value = data.prototipo || '';
                     
-                    // Limpar campos LEPEBES
                     this.lepeesSteps.forEach(step => {
                         const el = document.getElementById(`lepees-${step.id}`);
                         if (el) {
@@ -904,7 +1278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  this.conversationHistory.push({ role: 'user', parts: [{ text: `Exercício: "${exerciseInput.value.trim()}"` }] });
             }
             
-            const userPrompt = `Meu código (versão atual):\n\`\`\`c\n${codeInput.value.trim()}\n\`\`\`\n\nPor favor, analise-o novamente, considerando nosso histórico.`;
+            const userPrompt = `Meu código (versão atual):\n\`\`\`c\n${codeInput.value.trim()}\n\`\`\`\n\nPor favor, analise-o novamente.`;
             this.conversationHistory.push({ role: 'user', parts: [{ text: userPrompt }] });
 
             const data = await this.callApi('/api/analyze-code', { 
@@ -915,7 +1289,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.setLoading(button, false);
 
             if (data) {
-                this.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(data) }] }); // Store raw response for context
+                this.conversationHistory.push({ role: 'model', parts: [{ text: JSON.stringify(data) }] });
                 const isCorrect = data.assessment.nextAction !== 'REDO';
                 this.renderFeedback(data.feedbackHtml, isCorrect ? 'green' : 'red');
                 if (chatContainer) chatContainer.classList.remove('hidden');
@@ -952,10 +1326,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Exponha o app globalmente para acessar nos event handlers
     window.app = app;
     app.init();
 });
 </script>
+<footer>
+  <p>© 2025 - Esta plataforma foi desenvolvida por gabrielhando com auxílio de IA e não tem fins lucrativos</p>
+</footer>
+<style>
+  footer {
+    width: 100%;           /* ocupa toda a largura */
+    text-align: center;    /* centraliza o texto */
+    font-size: 12px;       /* deixa menor */
+    color: #777;           /* cinza discreto */
+    background: #f9f9f9;   /* opcional: fundo claro */
+    padding: 8px 0;        /* espaço interno */
+    border-top: 1px solid #ddd; /* linha separadora opcional */
+  }
+</style>
 </body>
 </html>
