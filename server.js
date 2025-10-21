@@ -96,7 +96,7 @@ app.post('/api/generate-exercise', async (req, res) => {
     }
 });
 
-// Endpoint para analisar plano LEPEEs
+// Endpoint para analisar plano LEPEBES
 app.post('/api/analyze-plan', async (req, res) => {
     try {
         const { exercise, lepeesData } = req.body;
@@ -109,7 +109,7 @@ app.post('/api/analyze-plan', async (req, res) => {
         if (!lepeesData || typeof lepeesData !== 'object') {
             return res.status(400).json({ error: 'lepeesData é obrigatório e deve ser um objeto' });
         }
-        const systemPrompt = `Você é um tutor de C. Analise o planejamento LEPEEs do aluno. Verifique se ele entendeu o problema e planejou bem. Responda APENAS com JSON válido no formato: {"feedback": "...", "readyToCode": boolean}`;
+        const systemPrompt = `Você é um tutor de C. Analise o planejamento LEPEBES do aluno. Verifique se ele entendeu o problema e planejou bem. Responda APENAS com JSON válido no formato: {"feedback": "...", "readyToCode": boolean}`;
         const userPrompt = `Exercício: "${exercise}"\n\nPlanejamento do aluno:\n${JSON.stringify(lepeesData, null, 2)}`;
         const responseText = await callGemini(systemPrompt, userPrompt, true);
         const cleanedText = cleanJsonResponse(responseText);
