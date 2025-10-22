@@ -91,7 +91,7 @@ GEMINI_API_KEY=AIzaSyAquiVaiSuaChaveCompleta123456789
 - **E (Entender)**: Liste entradas, saídas e regras
 - **P (Português)**: Escreva o algoritmo em pseudocódigo linha por linha
 - **E (Estrutura)**: Defina variáveis (com tipos) e estruturas (if/for/while)
-- **B (Britney Spears)**: Respire fundo! 🎤 Você planejou tudo.
+- **B (Britney Spears)**: Britney Spears.
 - **Es (Esqueleto)**: Escreva o código em C
 
 ### 4. Analise Seu Plano
