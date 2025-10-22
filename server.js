@@ -3,6 +3,9 @@ import path from 'path';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import 'dotenv/config';
 import showdown from 'showdown';
+import authRoutes from './server/routes/auth.js';
+import progressRoutes from './server/routes/progress.js';
+import db from './server/db.js';
 
 const app = express();
 const converter = new showdown.Converter();
@@ -10,6 +13,10 @@ const __dirname = path.resolve();
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Auth and progress routes
+app.use('/auth', authRoutes);
+app.use('/api/progress', progressRoutes);
 
 // Verificar se a API key está configurada
 if (!process.env.GEMINI_API_KEY) {

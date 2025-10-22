@@ -34,6 +34,7 @@ Um sistema inteligente de tutoria para aprendizado de programação em C, desenv
 - Node.js (versão 18 ou superior)
 - NPM ou Yarn
 - Chave de API do Google Gemini
+- PostgreSQL (local ou cloud) - Para features de autenticação e progresso
 
 ## 🔧 Instalação
 
@@ -51,15 +52,42 @@ npm install
 3. **Configure as variáveis de ambiente:**
 ```bash
 # Crie um arquivo .env na raiz do projeto
-echo "GEMINI_API_KEY=sua_chave_aqui" > .env
+cat > .env << EOF
+GEMINI_API_KEY=sua_chave_gemini_aqui
+DATABASE_URL=postgresql://usuario:senha@host:5432/database
+JWT_SECRET=sua_chave_secreta_jwt_aqui
+EOF
 ```
 
-4. **Execute o servidor:**
+**Variáveis de Ambiente:**
+- `GEMINI_API_KEY`: Chave da API do Google Gemini (obrigatória)
+- `DATABASE_URL`: String de conexão PostgreSQL (opcional - para autenticação/progresso)
+- `JWT_SECRET`: Chave secreta para assinar tokens JWT (opcional - para autenticação/progresso)
+
+4. **Configure o banco de dados (se usando autenticação):**
+
+Se você vai usar as features de autenticação e progresso persistente, execute as migrations:
+
+```bash
+# Usando psql
+psql $DATABASE_URL < migrations/create_tables.sql
+
+# OU usando Supabase SQL Editor (cole o conteúdo do arquivo)
+# OU usando outro cliente PostgreSQL de sua preferência
+```
+
+**Opções de PostgreSQL gratuitas:**
+- [Supabase](https://supabase.com/) - Free tier com 500MB
+- [ElephantSQL](https://www.elephantsql.com/) - Free tier com 20MB
+- [Render PostgreSQL](https://render.com/docs/databases) - Free tier com 90 dias
+- PostgreSQL local para desenvolvimento
+
+5. **Execute o servidor:**
 ```bash
 npm start
 ```
 
-5. **Acesse a aplicação:**
+6. **Acesse a aplicação:**
 ```
 http://localhost:3000
 ```
@@ -124,12 +152,65 @@ tutor-inteligente-c/
 ├── public/
 │   ├── index.html          # Interface principal (ATUALIZADA)
 │   └── desespero.html      # Página motivacional
+├── server/
+│   ├── db.js              # Conexão PostgreSQL
+│   └── routes/
+│       ├── auth.js        # Rotas de autenticação
+│       └── progress.js    # Rotas de progresso
+├── migrations/
+│   └── create_tables.sql  # Schema do banco de dados
 ├── server.js               # Servidor Express (ATUALIZADO)
 ├── package.json            # Dependências
 ├── .env.example           # Exemplo de configuração
 ├── .gitignore             # Arquivos ignorados
 └── README.md              # Este arquivo
 ```
+
+## 🔐 API Endpoints
+
+### Autenticação
+
+**POST `/auth/signup`** - Cadastro de novo usuário
+```json
+{
+  "name": "Nome do Usuário",
+  "email": "usuario@email.com",
+  "password": "senha123"
+}
+```
+
+**POST `/auth/login`** - Login de usuário
+```json
+{
+  "email": "usuario@email.com",
+  "password": "senha123"
+}
+```
+
+### Progresso (Requer autenticação JWT)
+
+**GET `/api/progress`** - Buscar progresso do usuário
+```bash
+# Header: Authorization: Bearer <token>
+```
+
+**PUT `/api/progress`** - Atualizar progresso do usuário
+```json
+{
+  "data": {
+    "estruturasCondicionais": 75,
+    "loops": 50,
+    "exerciciosCompletos": 5
+  }
+}
+```
+
+### Exercícios e Análise (existentes)
+
+**POST `/api/generate-exercise`** - Gerar exercício
+**POST `/api/analyze-plan`** - Analisar planejamento LEPEBES
+**POST `/api/analyze-code`** - Analisar código C
+**POST `/api/chat`** - Chat com tutor IA
 
 ## 🎓 O Método LEPEBES
 
