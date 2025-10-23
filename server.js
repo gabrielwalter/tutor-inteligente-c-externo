@@ -1,3 +1,7 @@
+import authRoutes from './server/routes/auth.js';
+import progressRoutes from './server/routes/progress.js';
+import adminRoutes from './server/routes/admin.js';
+import db from './server/db.js';
 import express from 'express';
 import path from 'path';
 import { GoogleGenerativeAI } from '@google/generative-ai';
@@ -10,6 +14,10 @@ const __dirname = path.resolve();
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/auth', authRoutes);
+app.use('/api/progress', progressRoutes);
+app.use('/admin', adminRoutes);
 
 // Verificar se a API key está configurada
 if (!process.env.GEMINI_API_KEY) {
