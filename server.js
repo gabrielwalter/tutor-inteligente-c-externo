@@ -369,15 +369,15 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '0.0.0.0';
+const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, HOST, () => {
-    console.log('🚀 ===== TUTOR INTELIGENTE DE C =====');
-    console.log(`✅ Servidor rodando em http://${HOST}:${PORT}`);
-    console.log(`📊 Ambiente: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🔑 API Key configurada: ${process.env.GEMINI_API_KEY ? '✅ Sim' : '❌ Não'}`);
-    console.log('🌐 Acesse o navegador para começar a usar!');
-    console.log('🎤 Método LEPEBES com Britney Spears ativado!');
-    console.log('=====================================');
+app.listen(PORT, () => {
+  console.log('🚀 ====== TUTOR INTELIGENTE DE C ======');
+  console.log(`✅ Servidor rodando na porta: ${PORT}`);
+  console.log(`🌱 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🧠 API Key configurada: ${process.env.GEMINI_API_KEY ? 'Sim' : 'Não'}`);
+  console.log('🧩 Acesse o navegador para começar a usar!');
+  console.log('🎤 Método LEPEBES com Britney Spears ativado!');
+  console.log('=========================================');
 });
+
