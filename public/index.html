@@ -224,6 +224,19 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- NOVO: Status de Autenticação -->
+            <div class="flex items-center justify-between mt-4">
+                <div>
+                    <span class="text-sm text-gray-500" id="auth-status">Visitante</span>
+                </div>
+                <button id="auth-link" class="bg-violet-500 hover:bg-violet-600 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors" 
+                    onclick="app.showModal('login')">
+                    Entrar / Cadastrar
+                </button>
+            </div>
+            <!-- FIM: Status de Autenticação -->
+
         </div>
 
         <div class="bg-white rounded-xl shadow-lg mb-6 overflow-hidden tab-container">
@@ -257,10 +270,15 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const app = {
+        // NOVAS VARIÁVEIS DE ESTADO DE AUTENTICAÇÃO
         activeTab: 'inicio',
         isAnalyzing: false,
         examDate: new Date('2025-11-17'),
         conversationHistory: [],
+        
+        user: null, // Objeto do usuário logado
+        token: localStorage.getItem('userToken') || null, // Token JWT salvo
+
         progressData: {},
         lepebesExampleStep: 0,
         topics: {
@@ -286,62 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'britney', label: 'B', title: 'Britney Spears (eterna princesa do pop)', type: 'checkbox' },
             { id: 'esqueleto', label: 'Es', title: 'Esqueleto (em C)', type: 'textarea' }
         ],
-        lepebesExample: [
-            {
-                letter: 'L',
-                title: 'Ler',
-                problem: 'Escreva um programa que leia N números e imprima quantos são pares.',
-                content: '📖 Primeiro, leia TODO o enunciado com atenção. Não pule partes!',
-                action: '✅ Li o problema completo'
-            },
-            {
-                letter: 'E',
-                title: 'Entender',
-                content: `**Entradas:**<br>- Um número inteiro N (quantidade de números)<br>- N números inteiros<br><br>**Saídas:**<br>- Um número inteiro (quantidade de pares)<br><br>**Regras:**<br>- Número par: divisível por 2 (resto da divisão por 2 é 0)<br>- Preciso contar, não imprimir os números pares`,
-                highlight: 'Separar claramente: O QUE entra → O QUE sai → COMO processar'
-            },
-            {
-                letter: 'P',
-                title: 'Português',
-                content: `**Pseudocódigo linha por linha:**<br><br>1. Ler quantidade N de números<br>2. Criar contador de pares (começa em 0)<br>3. Para cada número de 1 até N:<br>&nbsp;&nbsp;&nbsp;- Ler o número atual<br>&nbsp;&nbsp;&nbsp;- Se o número é divisível por 2:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Aumentar contador em 1<br>4. Imprimir o contador`,
-                highlight: 'Português PURO, não "código disfarçado"!'
-            },
-            {
-                letter: 'E',
-                title: 'Estrutura',
-                content: `**Variáveis:**<br>- <code>int n</code> - quantidade de números<br>- <code>int numero</code> - número atual sendo lido<br>- <code>int contador_pares</code> - conta quantos pares<br>- <code>int i</code> - controle do loop<br><br>**Estruturas:**<br>- Loop FOR (de 1 até n)<br>- IF (para verificar se é par)<br><br>**Operadores:**<br>- <code>%</code> (módulo) para verificar divisibilidade`,
-                highlight: 'Definir TIPOS das variáveis e QUAIS estruturas usar'
-            },
-            {
-                letter: 'B',
-                title: 'Britney Spears',
-                content: `🎤 "...Baby One More Time" 🎵<br><br>Respire fundo!<br>Você planejou tudo.<br>Agora é só transformar em código.<br><br>💜 Lembre-se: Todo programador comete erros.<br>O importante é o processo de raciocínio!`,
-                highlight: 'Momento de descontração antes de codificar ✨'
-            },
-            {
-                letter: 'Es',
-                title: 'Esqueleto',
-                content: `<pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto"><code>#include &lt;stdio.h&gt;
-
-int main() {
-    int n, numero, contador_pares = 0;
-    
-    scanf("%d", &n);
-    
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &numero);
-        if (numero % 2 == 0) {
-            contador_pares++;
-        }
-    }
-    
-    printf("%d\\n", contador_pares);
-    
-    return 0;
-}</code></pre>`,
-                highlight: 'Traduzir o plano em código C!'
-            }
-        ],
 
         elements: {},
 
@@ -357,9 +319,13 @@ int main() {
                 },
                 dateDisplay: document.getElementById('current-date'),
                 examCountdown: document.getElementById('exam-countdown'),
+                // NOVOS ELEMENTOS DO CABEÇALHO
+                authStatus: document.getElementById('auth-status'),
+                authLink: document.getElementById('auth-link'),
             };
+            this.loadAuthData(); // NOVO: Carrega sessão salva (token/user)
+            this.loadProgress(); // Esta função agora usa o token, se existir
             this.setupEventListeners();
-            this.loadProgress();
             this.render();
             this.updateDate();
             this.updateCountdown();
@@ -407,11 +373,222 @@ int main() {
             }
         },
 
-        saveProgress() {
-            localStorage.setItem('tutorCProgress', JSON.stringify(this.progressData));
+        // =======================================================
+        // FUNÇÕES DE AUTENTICAÇÃO E SESSÃO (NOVAS)
+        // =======================================================
+
+        loadAuthData() {
+            const token = localStorage.getItem('userToken');
+            const userData = localStorage.getItem('userData');
+
+            if (token && userData && this.elements.authStatus && this.elements.authLink) {
+                try {
+                    this.token = token;
+                    this.user = JSON.parse(userData);
+                    
+                    // Atualiza a UI para estado Logado
+                    this.elements.authStatus.textContent = `Logado como: ${this.user.name || this.user.email}`;
+                    this.elements.authLink.onclick = () => this.handleLogout();
+                    this.elements.authLink.textContent = 'Sair';
+                    return true;
+                } catch (e) {
+                    // Erro ao parsear, limpa dados corrompidos
+                    this.handleLogout(false); 
+                }
+            }
+            if (this.elements.authStatus && this.elements.authLink) {
+                 // Atualiza a UI para estado Visitante
+                this.elements.authStatus.textContent = 'Visitante';
+                this.elements.authLink.onclick = () => this.showModal('login'); 
+                this.elements.authLink.textContent = 'Entrar / Cadastrar';
+            }
+            this.token = null;
+            this.user = null;
+            return false;
         },
 
-        loadProgress() {
+        handleLoginSuccess(token, user) {
+            this.token = token;
+            this.user = user;
+            localStorage.setItem('userToken', token);
+            localStorage.setItem('userData', JSON.stringify(user));
+            
+            this.loadAuthData(); 
+            this.hideModals(); 
+            this.loadProgress(); 
+        },
+
+        handleLogout(reload = true) {
+            this.token = null;
+            this.user = null;
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userData');
+            if (reload) {
+                alert('Você saiu. O progresso será salvo localmente até o próximo login.');
+                window.location.reload(); 
+            }
+        },
+
+        // =======================================================
+        // MODAL E FORMULÁRIOS
+        // =======================================================
+
+        showModal(type = 'login') {
+            document.getElementById('auth-modal').classList.remove('hidden');
+            if (type === 'login') {
+                this.showLogin();
+            } else {
+                this.showSignup();
+            }
+        },
+
+        hideModals() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        },
+
+        showLogin() {
+            document.getElementById('modal-title').textContent = 'Entrar';
+            document.getElementById('login-form-content').classList.remove('hidden');
+            document.getElementById('signup-form-content').classList.add('hidden');
+        },
+
+        showSignup() {
+            document.getElementById('modal-title').textContent = 'Criar Conta';
+            document.getElementById('login-form-content').classList.add('hidden');
+            document.getElementById('signup-form-content').classList.remove('hidden');
+        },
+
+        async login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) return alert('Preencha email e senha!');
+            
+            const button = document.querySelector('#login-form-content button');
+            this.setLoading(button, true, 'Entrando...');
+
+            try {
+                // Seu backend espera 'email' e 'password'
+                const data = await this.callApi('/auth/login', { email, password });
+                
+                if (data && data.token && data.user) {
+                    this.handleLoginSuccess(data.token, data.user); 
+                }
+            } catch(e) {
+                // Erros tratados em callApi
+            } finally {
+                this.setLoading(button, false);
+            }
+        },
+
+        async signup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            
+            if (!email || !password) return alert('Preencha email e senha!');
+            
+            const button = document.querySelector('#signup-form-content button');
+            this.setLoading(button, true, 'Criando Conta...');
+
+            try {
+                // Seu backend espera 'name', 'email' e 'password'
+                const data = await this.callApi('/auth/signup', { name: name || null, email, password });
+                
+                if (data && data.token && data.user) {
+                    this.handleLoginSuccess(data.token, data.user);
+                }
+            } catch(e) {
+                // Erros tratados em callApi
+            } finally {
+                this.setLoading(button, false);
+            }
+        },
+
+        // =======================================================
+        // MÉTODOS API (AJUSTADOS PARA AUTENTICAÇÃO)
+        // =======================================================
+
+        // MODIFICADO: Adiciona suporte a method e headers (incluindo o Auth)
+        async callApi(endpoint, body = null, method = 'POST', headers = {}) { 
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 45000);
+                
+                const fetchOptions = {
+                    method: method, 
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        ...headers // Permite a passagem do header Authorization
+                    },
+                    signal: controller.signal
+                };
+                
+                if (body && method !== 'GET' && method !== 'HEAD') { 
+                    fetchOptions.body = JSON.stringify(body);
+                }
+
+                const response = await fetch(endpoint, fetchOptions);
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    let errorData = {};
+                    try {
+                        errorData = await response.json();
+                    } catch (e) { /* ignore */ }
+                    
+                    const errorMessage = errorData.error || `Erro HTTP ${response.status}: ${response.statusText}`;
+                    const error = new Error(errorMessage);
+                    error.status = response.status;
+                    throw error;
+                }
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                // Tratamento de erro específico para o usuário
+                if (error.status === 401) {
+                    alert('Credenciais inválidas. Verifique seu email e senha.');
+                } else if (error.status === 409) {
+                    alert('Email já cadastrado. Tente entrar com sua conta.');
+                } else if (error.status) {
+                    alert(`Ocorreu um erro: ${error.message}`);
+                } else if (error.name === 'AbortError') {
+                    alert('A requisição demorou demais e foi cancelada (Timeout).');
+                } else {
+                    alert('Erro de conexão ou desconhecido. Tente novamente.');
+                }
+                
+                // O erro é relançado para ser capturado nas funções de login/progress
+                throw error; 
+            }
+        },
+
+        // MODIFICADO: Prioriza o servidor, usa o token no header
+        async loadProgress() {
+            this.loadAuthData(); // Garante que o estado de login está atualizado
+            
+            if (this.token) {
+                try {
+                    // Tenta carregar do servidor usando o token (GET)
+                    const data = await this.callApi('/api/progress', null, 'GET', { 
+                        'Authorization': `Bearer ${this.token}` 
+                    });
+                    if (data && data.data) {
+                        this.progressData = data.data;
+                        console.log('Progresso carregado do servidor (autenticado).');
+                        return; // Sucesso
+                    }
+                } catch (e) {
+                    // Se o token for inválido (Erro 401), desloga o usuário
+                    if (e.message && e.message.includes('401')) {
+                        this.handleLogout(false); 
+                    }
+                    console.error('Erro ao carregar do servidor. Carregando progresso local...');
+                }
+            } 
+            
+            // Fallback para progresso local
             const savedData = localStorage.getItem('tutorCProgress');
             if (savedData) this.progressData = JSON.parse(savedData);
             else {
@@ -419,8 +596,34 @@ int main() {
                      if(this.progressData[t.id] === undefined) this.progressData[t.id] = 0;
                  });
             }
+            console.log('Usando progresso local/anônimo.');
         },
 
+        // MODIFICADO: Prioriza o servidor, usa o token no header
+        async saveProgress() {
+            // Chamado por analyzeCode.
+            if (this.token && this.user) {
+                try {
+                    // Tenta salvar no servidor usando o token (PUT)
+                    const data = await this.callApi('/api/progress', { data: this.progressData }, 'PUT', { 
+                        'Authorization': `Bearer ${this.token}` 
+                    });
+                    if (data && data.ok) {
+                        console.log('Progresso salvo no servidor (autenticado).');
+                        return; // Sucesso
+                    }
+                } catch (e) {
+                    console.error('Erro ao salvar progresso no servidor. Salvando localmente.', e);
+                    // Se houver erro, cai para o salvamento local
+                }
+            } 
+            
+            // Salva progresso localmente (fallback ou anônimo)
+            localStorage.setItem('tutorCProgress', JSON.stringify(this.progressData));
+            console.log('Progresso salvo localmente.');
+        },
+        
+        // As funções render... originais permanecem as mesmas
         render() {
             Object.values(this.elements.views).forEach(view => view.style.display = 'none');
             this.elements.views[this.activeTab].style.display = 'block';
@@ -1141,42 +1344,6 @@ int main() {
             }
         },
         
-        async callApi(endpoint, body) {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 45000);
-                
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body),
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error || `Erro HTTP ${response.status}`);
-                }
-                
-                const result = await response.json();
-                return result;
-            } catch (error) {
-                console.error(`Erro na chamada da API para ${endpoint}:`, error);
-                
-                let errorMessage = 'Erro desconhecido';
-                if (error.name === 'AbortError') {
-                    errorMessage = 'Timeout: A requisição demorou muito para responder.';
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                
-                alert(`Ocorreu um erro: ${errorMessage}. Tente novamente.`);
-                return null;
-            }
-        },
-
         async generateExercise(topicName, difficulty = 'normal') {
             const button = document.querySelector(`.practice-button[data-topic="${topicName}"]`);
             if (button) this.setLoading(button, true, 'Gerando...');
@@ -1296,6 +1463,7 @@ int main() {
                 this.renderNextStep(data.assessment);
 
                 if(isCorrect && data.assessment.topicId && this.progressData.hasOwnProperty(data.assessment.topicId)) {
+                    // Tenta salvar o progresso atualizado no servidor
                     this.progressData[data.assessment.topicId] = Math.min(100, (this.progressData[data.assessment.topicId] || 0) + 25);
                     this.saveProgress();
                 }
@@ -1330,6 +1498,62 @@ int main() {
     app.init();
 });
 </script>
+
+<!-- NOVO: Modal de Autenticação para Login e Cadastro -->
+<div id="auth-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden z-50 flex items-center justify-center transition-opacity duration-300">
+    <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
+        <div class="flex justify-between items-center mb-6">
+            <h2 id="modal-title" class="text-2xl font-bold text-gray-800">Entrar</h2>
+            <button onclick="app.hideModals()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Formulário de Login -->
+        <div id="login-form-content">
+            <div class="space-y-4">
+                <div>
+                    <label for="login-email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="login-email" class="modern-input mt-1 block w-full px-3 py-2 rounded-lg" required>
+                </div>
+                <div>
+                    <label for="login-password" class="block text-sm font-medium text-gray-700">Senha</label>
+                    <input type="password" id="login-password" class="modern-input mt-1 block w-full px-3 py-2 rounded-lg" required>
+                </div>
+                <button onclick="app.login()" class="modern-button w-full text-white font-bold py-3 rounded-lg">Entrar</button>
+            </div>
+            <p class="mt-4 text-center text-sm">
+                Não tem conta? 
+                <button onclick="app.showSignup()" class="text-violet-600 hover:text-violet-800 font-semibold">Cadastre-se</button>
+            </p>
+        </div>
+
+        <!-- Formulário de Cadastro (Inicialmente oculto) -->
+        <div id="signup-form-content" class="hidden">
+            <div class="space-y-4">
+                <div>
+                    <label for="signup-name" class="block text-sm font-medium text-gray-700">Nome (Opcional)</label>
+                    <input type="text" id="signup-name" class="modern-input mt-1 block w-full px-3 py-2 rounded-lg">
+                </div>
+                <div>
+                    <label for="signup-email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="signup-email" class="modern-input mt-1 block w-full px-3 py-2 rounded-lg" required>
+                </div>
+                <div>
+                    <label for="signup-password" class="block text-sm font-medium text-gray-700">Senha</label>
+                    <input type="password" id="signup-password" class="modern-input mt-1 block w-full px-3 py-2 rounded-lg" required>
+                </div>
+                <button onclick="app.signup()" class="modern-button w-full text-white font-bold py-3 rounded-lg">Criar Conta</button>
+            </div>
+            <p class="mt-4 text-center text-sm">
+                Já tem conta? 
+                <button onclick="app.showLogin()" class="text-violet-600 hover:text-violet-800 font-semibold">Fazer Login</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- FIM: Modal de Autenticação -->
+
 <footer>
   <p>© 2025 - Esta plataforma foi desenvolvida por gabrielhando com auxílio de IA e não tem fins lucrativos</p>
 </footer>
