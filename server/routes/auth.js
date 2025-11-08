@@ -5,6 +5,8 @@ import db from '../db.js';
 
 const router = express.Router();
 
+// TODO: Reativar o cadastro assim que a experiência estiver finalizada.
+/*
 // POST /auth/signup
 router.post('/signup', async (req, res) => {
   try {
@@ -27,6 +29,7 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ error: 'erro interno' });
   }
 });
+*/
 
 // POST /auth/login
 router.post('/login', async (req, res) => {
