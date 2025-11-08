@@ -305,6 +305,43 @@ document.addEventListener('DOMContentLoaded', () => {
             { id: 'esqueleto', label: 'Es', title: 'Esqueleto (em C)', type: 'textarea' }
         ],
 
+        // ADICIONADO: dados de exemplo para a visão 'Exemplo' — evita erro se estiver ausente
+        lepebesExample: [
+            {
+                letter: 'L',
+                title: 'Ler: Entender o enunciado',
+                problem: 'Dado um número N, calcule a soma de 1 até N.',
+                content: 'Identificar entradas (N inteiro), saída (soma). Restrições: N >= 0.',
+                action: 'Testes simples: N=0 → 0, N=3 → 6',
+                highlight: 'Sempre pensar em limites e tipos.'
+            },
+            {
+                letter: 'E',
+                title: 'Entender: Entradas/Saídas',
+                content: 'Entrada: inteiro N. Saída: inteiro com a soma.'
+            },
+            {
+                letter: 'P',
+                title: 'Português: Pseudocódigo',
+                content: 'soma = 0; para i de 1 até N: soma += i; imprimir soma.'
+            },
+            {
+                letter: 'E',
+                title: 'Estrutura: Variáveis e Loop',
+                content: 'int soma = 0; for (int i=1;i<=N;i++) soma += i;'
+            },
+            {
+                letter: 'B',
+                title: 'Britney: Motivação',
+                content: 'Mantenha o foco — teste cada etapa.'
+            },
+            {
+                letter: 'Es',
+                title: 'Esqueleto: Código em C',
+                content: '#include <stdio.h>\\nint main(){int N; if(scanf("%d",&N)==1){int s=0; for(int i=1;i<=N;i++) s+=i; printf("%d\\n",s);} return 0;}'
+            }
+        ],
+
         elements: {},
 
         init() {
