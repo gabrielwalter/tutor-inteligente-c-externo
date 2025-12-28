@@ -153,55 +153,62 @@ Responda APENAS com JSON válido no formato:
     }
 });
 
-// Endpoint para analisar plano LEPEBES - MUITO MELHORADO
+// Endpoint para analisar plano PROVAR - MUITO MELHORADO
 app.post('/api/analyze-plan', async (req, res) => {
     try {
-        const { exercise, lepeesData } = req.body;
+        const { exercise, provarData } = req.body;
         
         if (!exercise || typeof exercise !== 'string' || exercise.trim().length === 0) {
             return res.status(400).json({ error: 'exercise é obrigatório e deve ser uma string não vazia' });
         }
         
-        if (!lepeesData || typeof lepeesData !== 'object') {
-            return res.status(400).json({ error: 'lepeesData é obrigatório e deve ser um objeto' });
+        if (!provarData || typeof provarData !== 'object') {
+            return res.status(400).json({ error: 'provarData é obrigatório e deve ser um objeto' });
         }
 
-        const systemPrompt = `Você é um tutor pedagógico especializado em ensinar programação em C usando o método LEPEBES.
+        const systemPrompt = `Você é um tutor pedagógico especializado em ensinar programação em C usando o método PROVAR.
 
 **Seu objetivo**: Analisar DETALHADAMENTE cada etapa do planejamento do aluno e identificar se ele está REALMENTE pronto para codificar.
 
+**O Método PROVAR** (baseado em Forbellone, Ascencio e referenciais pedagógicos):
+- P = Problema (ler e compreender)
+- R = Requisitos (entradas, saídas, variáveis E tipos - TUDO JUNTO)
+- O = Ordenar Passos (algoritmo em português)
+- V = Verter para C (traduzir código)
+- A = Analisar (testar com exemplos)
+- R = Revisar (corrigir erros)
+
 **Análise por Etapa**:
 
-📖 **L - Ler**: 
-- Verificar se marcou que leu o problema
+📖 **P - Problema**: 
+- Verificar se marcou que leu e compreendeu o problema
 - Se NÃO marcou: alertar educadamente
 
-🧠 **E - Entender**: 
+📋 **R - Requisitos** (ETAPA CRÍTICA - dados integrados):
 - O aluno identificou TODAS as entradas (tipo e quantidade)?
 - O aluno identificou TODAS as saídas (o que imprimir e como)?
+- O aluno listou TODAS as variáveis necessárias com seus TIPOS?
 - O aluno entendeu as regras/restrições do problema?
 - Se algo está VAGO ou FALTANDO: indique ESPECIFICAMENTE o que está ausente
-- Use perguntas socráticas: "Você identificou quantos números serão lidos?"
+- Use perguntas socráticas: "Você identificou o tipo de cada variável?"
 
-📝 **P - Português (pseudocódigo)**:
-- O pseudocódigo está em PORTUGUÊS CLARO (não "C disfarçado")?
-- Está LINHA POR LINHA (cada passo separado)?
+📝 **O - Ordenar Passos (algoritmo)**:
+- O algoritmo está em PORTUGUÊS CLARO (não "C disfarçado")?
+- Está PASSO A PASSO (cada ação separada)?
 - A lógica faz sentido e resolve o problema?
 - Se está confuso: sugira como reescrever SEM dar a resposta pronta
 
-🏗️ **E - Estrutura**:
-- O aluno identificou as VARIÁVEIS necessárias e seus TIPOS?
-- O aluno indicou quais ESTRUTURAS usar (if/while/for/função)?
-- Se algo está faltando: pergunte "Você vai precisar de um contador? De que tipo?"
-
-🎤 **B - Britney Spears**:
-- Sempre elogiar por ter chegado até aqui!
-- Reforçar que respirar é importante antes de codificar
-
-🦴 **Es - Esqueleto**:
-- Tem a estrutura básica (#include <stdio.h>, int main(), return 0)?
+💻 **V - Verter para C**:
+- O aluno esboçou como será o código em C?
 - Os nomes das variáveis fazem sentido?
-- Está esboçado de forma que ajude na codificação?
+- Está alinhado com o algoritmo definido?
+
+🧪 **A - Analisar**:
+- O aluno pensou em casos de teste?
+- Considerou casos limite (zero, negativo, máximo)?
+
+✅ **R - Revisar**:
+- Verificar se o aluno está pronto para revisar o código final
 
 **Estilo de Feedback**:
 - Use emojis para deixar amigável
@@ -222,8 +229,8 @@ Responda APENAS com JSON válido no formato:
 
         const userPrompt = `**Exercício**: "${exercise}"
 
-**Planejamento do aluno (LEPEBES)**:
-${JSON.stringify(lepeesData, null, 2)}
+**Planejamento do aluno (PROVAR)**:
+${JSON.stringify(provarData, null, 2)}
 
 Analise detalhadamente cada etapa e dê feedback construtivo.`;
 
@@ -262,7 +269,7 @@ app.post('/api/analyze-code', async (req, res) => {
 
 1. 🧠 **Erro Conceitual**: O aluno não entendeu o problema
    - Exemplo: lê a quantidade errada de números, imprime o que não foi pedido
-   - Ação: Voltar ao LEPEBES etapa E (Entender)
+   - Ação: Voltar ao PROVAR etapa R (Requisitos)
    
 2. 🔀 **Erro Lógico**: O aluno entendeu o problema mas implementou a lógica errada
    - Exemplo: usa for quando deveria usar while, condição do if invertida
@@ -288,7 +295,7 @@ app.post('/api/analyze-code', async (req, res) => {
 
 **Avaliação do Domínio**:
 - **REDO**: Erros conceituais graves OU muitos erros lógicos
-  - Message: "Vamos revisar o planejamento! Volte ao LEPEBES para reorganizar as ideias."
+  - Message: "Vamos revisar o planejamento! Volte ao PROVAR para reorganizar as ideias."
   
 - **REINFORCE**: Erros pontuais mas aluno demonstra entendimento parcial
   - Message: "Você está no caminho certo! Pratique mais com um exercício similar."
@@ -377,7 +384,7 @@ app.listen(PORT, () => {
   console.log(`🌱 Ambiente: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🧠 API Key configurada: ${process.env.GEMINI_API_KEY ? 'Sim' : 'Não'}`);
   console.log('🧩 Acesse o navegador para começar a usar!');
-  console.log('🎤 Método LEPEBES com Britney Spears ativado!');
+  console.log('📚 Método PROVAR ativado!');
   console.log('=========================================');
 });
 

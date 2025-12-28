@@ -1,12 +1,12 @@
 # 🎓 Tutor Inteligente de C
 
-Um sistema inteligente de tutoria para aprendizado de programação em C, desenvolvido com IA pedagógica (Google Gemini) e integrando o método LEPEBES para resolução estruturada de problemas.
+Um sistema inteligente de tutoria para aprendizado de programação em C, desenvolvido com IA pedagógica (Google Gemini) e integrando o método PROVAR para resolução estruturada de problemas.
 
 ## 🚀 Funcionalidades
 
 ### 🎯 Núcleo Pedagógico
-- **Método LEPEBES Completo**: Sistema estruturado em 6 etapas (Ler, Entender, Português, Estruturas, Britney Spears, Esqueleto)
-- **Exemplo Interativo**: Tutorial passo a passo mostrando como aplicar o método LEPEBES na prática
+- **Método PROVAR Completo**: Sistema estruturado em 6 etapas (Problema, Requisitos, Ordenar, Verter, Analisar, Revisar)
+- **Exemplo Interativo**: Tutorial passo a passo mostrando como aplicar o método PROVAR na prática
 - **IA Pedagógica Avançada**: Identifica o TIPO de erro do aluno (conceitual, lógico ou sintático) e personaliza o feedback
 
 ### 🤖 Análise Inteligente
@@ -76,9 +76,9 @@ GEMINI_API_KEY=AIzaSyAquiVaiSuaChaveCompleta123456789
 
 ## 🎯 Como Usar
 
-### 1. Aprenda o Método (Aba "Exemplo LEPEBES")
+### 1. Aprenda o Método (Aba "Exemplo PROVAR")
 - Veja um problema sendo resolvido passo a passo
-- Entenda como aplicar cada etapa do LEPEBES
+- Entenda como aplicar cada etapa do PROVAR
 - Use as dicas pedagógicas para fixar o conceito
 
 ### 2. Gere Exercícios (Aba "Trilha")
@@ -86,13 +86,13 @@ GEMINI_API_KEY=AIzaSyAquiVaiSuaChaveCompleta123456789
 - Clique em **"Praticar"** para gerar um exercício personalizado
 - Exercícios são adaptados ao seu nível
 
-### 3. Use o Método LEPEBES (Aba "Prática")
-- **L (Ler)**: Marque que leu o problema
-- **E (Entender)**: Liste entradas, saídas e regras
-- **P (Português)**: Escreva o algoritmo em pseudocódigo linha por linha
-- **E (Estrutura)**: Defina variáveis (com tipos) e estruturas (if/for/while)
-- **B (Britney Spears)**: Britney Spears.
-- **Es (Esqueleto)**: Escreva o código em C
+### 3. Use o Método PROVAR (Aba "Prática")
+- **P (Problema)**: Leia e compreenda o enunciado
+- **R (Requisitos)**: Liste entradas, saídas, variáveis E tipos (tudo junto!)
+- **O (Ordenar)**: Escreva o algoritmo em português, passo a passo
+- **V (Verter)**: Traduza para código C
+- **A (Analisar)**: Teste com exemplos
+- **R (Revisar)**: Corrija erros encontrados
 
 ### 4. Analise Seu Plano
 - Clique em **"Analisar Plano"** antes de codificar
@@ -131,59 +131,60 @@ tutor-inteligente-c/
 └── README.md              # Este arquivo
 ```
 
-## 🎓 O Método LEPEBES
+## 🎓 O Método PROVAR
 
-O método LEPEBES é uma abordagem estruturada para resolução de problemas de programação:
+O método PROVAR é uma abordagem estruturada para resolução de problemas de programação, baseada em referenciais pedagógicos como Forbellone & Eberspächer e Ascencio & Campos:
 
-### 📖 **L - Ler**
-Leia cuidadosamente TODO o enunciado. Não pule partes!
+### 📖 **P - Problema**
+Leia cuidadosamente TODO o enunciado. Grife palavras-chave e identifique o objetivo.
 
-### 🧠 **E - Entender**
-Identifique claramente:
+### 📋 **R - Requisitos** (Etapa Crítica!)
+Identifique TUDO junto, antes de começar o algoritmo:
 - **Entradas**: O que o programa vai ler? (tipo e quantidade)
 - **Saídas**: O que o programa vai imprimir? (formato)
-- **Regras**: Quais são as restrições e condições?
+- **Variáveis**: Quais variáveis serão necessárias? (nome e tipo)
+- **Restrições**: Quais são as regras e condições?
 
-### 📝 **P - Português (Pseudocódigo)**
-Escreva o algoritmo em **PORTUGUÊS PURO**, linha por linha:
+### 📝 **O - Ordenar Passos (Algoritmo)**
+Escreva o algoritmo em **PORTUGUÊS PURO**, passo a passo:
 - ❌ Evite: "se numero mod 2 igual 0" (C disfarçado)
 - ✅ Use: "Se o número é divisível por 2"
 
-### 🏗️ **E - Estrutura**
-Defina ANTES de codificar:
-- **Variáveis**: Nome e TIPO (`int`, `float`, `char`)
-- **Estruturas**: Quais usar? (`if`, `for`, `while`, `função`)
-- **Operadores**: Quais necessários? (`%`, `&&`, `||`)
-
-### 🎤 **B - Britney Spears**
-Respire fundo! 🎵 *"...Baby One More Time"* 🎵
-
-Você planejou tudo. Agora é só transformar em código.
-
-💜 Lembre-se: Todo programador comete erros. O importante é o PROCESSO de raciocínio!
-
-### 🦴 **Es - Esqueleto (Código em C)**
-Traduza seu planejamento para C:
+### 💻 **V - Verter para C**
+Traduza seu algoritmo para código C:
 - Use nomes de variáveis descritivos
-- Siga a estrutura que você definiu
-- Teste com os exemplos do enunciado
+- Siga a ordem dos passos que você definiu
+- Mantenha o código organizado
+
+### 🧪 **A - Analisar (Testar)**
+Teste seu código com diferentes casos:
+- Casos normais
+- Casos limite (zero, negativo, máximo)
+- Casos especiais
+
+### ✅ **R - Revisar**
+Corrija erros encontrados:
+- Verifique se compila sem erros
+- Verifique se a saída está correta
+- Melhore a clareza do código se necessário
 
 ## 🤖 Como a IA Ajuda
 
 ### Análise de Planejamento
-A IA verifica cada etapa do LEPEBES:
+A IA verifica cada etapa do PROVAR:
 ```
-✅ Identificou todas as entradas?
-✅ Sabe exatamente o que imprimir?
-✅ Pseudocódigo está em português claro?
-✅ Definiu tipos das variáveis?
+✅ Compreendeu o problema?
+✅ Identificou todas as entradas, saídas, variáveis e tipos?
+✅ Algoritmo está em português claro?
+✅ Código C segue o algoritmo?
+✅ Testou com exemplos?
 ```
 
 ### Análise de Código (Feedback Personalizado)
 
 **Tipo 1: Erro Conceitual** 🧠
 - O aluno não entendeu o problema
-- **Ação**: Volta ao LEPEBES (etapa E - Entender)
+- **Ação**: Volta ao PROVAR (etapa R - Requisitos)
 - **Feedback**: "Vamos revisar o planejamento!"
 
 **Tipo 2: Erro Lógico** 🔀
@@ -266,7 +267,7 @@ Contribuições são bem-vindas! Para contribuir:
 ### Áreas para Contribuir
 - 🎨 Melhorias na UI/UX
 - 🤖 Otimização dos prompts pedagógicos
-- 📚 Novos exemplos LEPEBES
+- 📚 Novos exemplos PROVAR
 - 🧪 Testes automatizados
 - 🌐 Internacionalização
 
@@ -281,12 +282,25 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 ## 🙏 Agradecimentos
 
 - **Google Gemini**: Pela API de IA generativa
-- **Britney Spears**: Por inspirar o "B" do método (respire fundo!) 🎤💜
+- **Forbellone & Eberspächer**: Pela base pedagógica do método
+- **Ascencio & Campos**: Pelos referenciais de ensino de programação
 - **Comunidade**: Por feedback e sugestões de melhoria
 
 ## 📊 Changelog
 
-### v2.0.0 (Atual)
+### v3.0.0 (Atual)
+✨ **Novo Método PROVAR:**
+- Substituição do método LEPEBES pelo PROVAR
+- Baseado em referenciais pedagógicos (Forbellone, Ascencio)
+- Integração de dados (entradas, saídas, variáveis e tipos) em uma única etapa
+- Exemplo interativo atualizado com o novo método
+
+🔧 **Melhorias Técnicas:**
+- Prompts da IA atualizados para o método PROVAR
+- Interface redesenhada para o novo fluxo
+- Documentação completamente revisada
+
+### v2.0.0
 ✨ **Novidades Pedagógicas:**
 - Exemplo LEPEBES interativo com tutorial passo a passo
 - IA identifica tipo de erro (conceitual/lógico/sintático)
@@ -295,7 +309,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 🔧 **Melhorias Técnicas:**
 - Análise de planejamento mais rigorosa
-- Validação detalhada de cada etapa do LEPEBES
+- Validação detalhada de cada etapa
 - Sistema de progressão mais inteligente (REDO/REINFORCE/PROCEED)
 - Interface modernizada com gradientes
 
@@ -312,7 +326,7 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ## 💡 Dicas de Uso
 
-1. **Sempre preencha o LEPEBES completo** antes de codificar
+1. **Sempre preencha o PROVAR completo** antes de codificar
 2. **Use o exemplo interativo** se for sua primeira vez
 3. **Analise o plano** antes de escrever código
 4. **Leia o feedback com atenção** - a IA faz perguntas para te guiar
@@ -337,14 +351,20 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-## 🎤 Por que "Britney Spears" no método?
+## 📚 Por que o Método PROVAR?
 
-A letra **B** (Britney Spears) representa o momento crucial de **respirar fundo e se acalmar** antes de codificar. Assim como Britney nos ensinou a ter resiliência, o método LEPEBES te ensina que o importante não é acertar de primeira, mas ter um PROCESSO estruturado de raciocínio.
+O método **PROVAR** foi desenvolvido com base em referenciais pedagógicos consagrados no ensino de lógica de programação:
 
-💜 **"It's Britney, b*tch!"** - e agora é você quem vai arrasar na programação! 💜
+- **Forbellone & Eberspächer** - "Lógica de Programação"
+- **Ascencio & Campos** - "Fundamentos da Programação de Computadores"
+- **Polya** - "How to Solve It" (Stanford/Princeton)
+
+A principal diferença do PROVAR é a **integração dos dados** (entradas, saídas, variáveis e tipos) em uma única etapa (R - Requisitos), ANTES de escrever o algoritmo. Isso segue a abordagem do "dicionário de dados" recomendada por Forbellone.
+
+**PROVAR** = **P**roblema → **R**equisitos → **O**rdenar → **V**erter → **A**nalisar → **R**evisar
 
 ---
 
 ⭐ **Se este projeto te ajudou, não esqueça de dar uma estrela!** ⭐
 
-**#LEPEBES #BritneySpearsCanHelp #ProgramaçãoComMétodo** 🎓💻🎤
+**#PROVAR #ProgramaçãoComMétodo #TutorInteligente** 🎓💻
