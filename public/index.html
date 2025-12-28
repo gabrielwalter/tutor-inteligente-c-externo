@@ -83,7 +83,7 @@
             } 
         }
         
-        .lepees-label { 
+        .provar-label { 
             background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
             color: #5b21b6; 
             font-weight: 800; 
@@ -245,7 +245,7 @@
                     <span>🏠</span> Início
                 </button>
                 <button data-tab="exemplo" class="tab-button flex items-center gap-2 px-6 py-4 font-semibold transition-all text-gray-600 hover:bg-gray-50">
-                    <span>📖</span> Exemplo LEPEBES
+                    <span>📖</span> Exemplo PROVAR
                 </button>
                 <button data-tab="trilha" class="tab-button flex items-center gap-2 px-6 py-4 font-semibold transition-all text-gray-600 hover:bg-gray-50">
                     <span>📚</span> Trilha
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         token: localStorage.getItem('userToken') || null, // Token JWT salvo
 
         progressData: {},
-        lepebesExampleStep: 0,
+        provarExampleStep: 0,
         topics: {
             p1: [
                 { id: 'estruturasCondicionais', nome: 'Estruturas Condicionais', urgencia: 'alta' },
@@ -296,49 +296,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 { id: 'alocacaoDinamica', nome: 'Alocação Dinâmica', urgencia: 'critica' }
             ]
         },
-        lepeesSteps: [
-            { id: 'ler', label: 'L', title: 'Ler o problema', type: 'checkbox' },
-            { id: 'entender', label: 'E', title: 'Entender (entradas, saídas, regras)', type: 'textarea' },
-            { id: 'portugues', label: 'P', title: 'Português (pseudocódigo linha por linha)', type: 'textarea' },
-            { id: 'estrutura', label: 'E', title: 'Estrutura (variáveis, if, loop, função)', type: 'textarea' },
-            { id: 'britney', label: 'B', title: 'Britney Spears (eterna princesa do pop)', type: 'checkbox' },
-            { id: 'esqueleto', label: 'Es', title: 'Esqueleto (em C)', type: 'textarea' }
+        provarSteps: [
+            { id: 'problema', label: 'P', title: 'Problema (ler e compreender o enunciado)', type: 'checkbox' },
+            { id: 'requisitos', label: 'R', title: 'Requisitos (entradas, saídas, variáveis e tipos)', type: 'textarea' },
+            { id: 'ordenar', label: 'O', title: 'Ordenar Passos (algoritmo em português)', type: 'textarea' },
+            { id: 'verter', label: 'V', title: 'Verter para C (traduzir para código)', type: 'textarea' },
+            { id: 'analisar', label: 'A', title: 'Analisar (testar com exemplos)', type: 'textarea' },
+            { id: 'revisar', label: 'R', title: 'Revisar (corrigir erros)', type: 'checkbox' }
         ],
 
         // ADICIONADO: dados de exemplo para a visão 'Exemplo' — evita erro se estiver ausente
-        lepebesExample: [
-            {
-                letter: 'L',
-                title: 'Ler: Entender o enunciado',
-                problem: 'Dado um número N, calcule a soma de 1 até N.',
-                content: 'Identificar entradas (N inteiro), saída (soma). Restrições: N >= 0.',
-                action: 'Testes simples: N=0 → 0, N=3 → 6',
-                highlight: 'Sempre pensar em limites e tipos.'
-            },
-            {
-                letter: 'E',
-                title: 'Entender: Entradas/Saídas',
-                content: 'Entrada: inteiro N. Saída: inteiro com a soma.'
-            },
+        provarExample: [
             {
                 letter: 'P',
-                title: 'Português: Pseudocódigo',
-                content: 'soma = 0; para i de 1 até N: soma += i; imprimir soma.'
+                title: 'Problema: Ler e Compreender',
+                problem: 'Dado um número N, calcule a soma de 1 até N.',
+                content: 'Leia o enunciado com atenção. Identifique o objetivo: calcular uma soma de números consecutivos.',
+                action: 'Grife palavras-chave: "número N", "soma", "1 até N"',
+                highlight: 'Nunca pule a leitura! Entenda o que é pedido antes de prosseguir.'
             },
             {
-                letter: 'E',
-                title: 'Estrutura: Variáveis e Loop',
-                content: 'int soma = 0; for (int i=1;i<=N;i++) soma += i;'
+                letter: 'R',
+                title: 'Requisitos: Dados Completos',
+                content: 'ENTRADAS: Um inteiro N (quantidade de números a somar).\nSAÍDAS: Um inteiro representando a soma.\nVARIÁVEIS: int N (entrada), int soma (acumulador), int i (contador).\nTIPOS: Todos inteiros.\nRESTRIÇÕES: N >= 0.',
+                highlight: 'Identifique TUDO junto: entradas, saídas, variáveis e tipos. Isso evita confusão depois!'
             },
             {
-                letter: 'B',
-                title: 'Britney: Motivação',
-                content: 'Mantenha o foco — teste cada etapa.'
+                letter: 'O',
+                title: 'Ordenar Passos: Algoritmo em Português',
+                content: '1. Ler o número N\n2. Inicializar soma como zero\n3. Para cada número de 1 até N:\n   - Somar o número atual à soma\n4. Mostrar o resultado da soma',
+                highlight: 'Escreva em português claro, não em "C disfarçado". Cada passo deve ser simples e direto.'
             },
             {
-                letter: 'Es',
-                title: 'Esqueleto: Código em C',
-                content: '#include <stdio.h>\\nint main(){int N; if(scanf("%d",&N)==1){int s=0; for(int i=1;i<=N;i++) s+=i; printf("%d\\n",s);} return 0;}'
+                letter: 'V',
+                title: 'Verter para C: Traduzir o Código',
+                content: '#include <stdio.h>\nint main() {\n    int N, soma = 0;\n    scanf("%d", &N);\n    for (int i = 1; i <= N; i++) {\n        soma += i;\n    }\n    printf("%d\\n", soma);\n    return 0;\n}',
+                highlight: 'Traduza cada passo do algoritmo para C. Siga a ordem que você definiu.'
+            },
+            {
+                letter: 'A',
+                title: 'Analisar: Testar com Exemplos',
+                content: 'Teste 1: N=0 → soma=0 ✓\nTeste 2: N=1 → soma=1 ✓\nTeste 3: N=3 → soma=6 (1+2+3) ✓\nTeste 4: N=5 → soma=15 (1+2+3+4+5) ✓',
+                highlight: 'Execute mentalmente ou no compilador. Teste casos normais, limites e especiais.'
+            },
+            {
+                letter: 'R',
+                title: 'Revisar: Corrigir e Melhorar',
+                content: 'Verificações finais:\n✓ Código compila sem erros\n✓ Todos os testes passam\n✓ Variáveis têm nomes claros\n✓ Código está organizado',
+                highlight: 'Revise sempre! Pequenos erros são comuns e fáceis de corrigir nesta etapa.'
             }
         ],
 
@@ -673,22 +678,22 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         render_exemplo() {
-            const step = this.lepebesExample[this.lepebesExampleStep];
-            const totalSteps = this.lepebesExample.length;
+            const step = this.provarExample[this.provarExampleStep];
+            const totalSteps = this.provarExample.length;
             
             this.elements.views.exemplo.innerHTML = `
                 <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl p-6 mb-6">
-                    <h2 class="text-3xl font-bold mb-2">Exemplo LEPEBES Completo</h2>
+                    <h2 class="text-3xl font-bold mb-2">Exemplo PROVAR Completo</h2>
                     <p class="text-lg">Veja como resolver um problema passo a passo</p>
                 </div>
 
                 <div class="mb-8">
                     <div class="flex justify-between mb-2">
-                        ${this.lepebesExample.map((s, idx) => `
+                        ${this.provarExample.map((s, idx) => `
                             <div class="flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg transition-all ${
-                                idx === this.lepebesExampleStep
+                                idx === this.provarExampleStep
                                     ? 'bg-purple-600 text-white scale-110'
-                                    : idx < this.lepebesExampleStep
+                                    : idx < this.provarExampleStep
                                     ? 'bg-green-500 text-white'
                                     : 'bg-gray-200 text-gray-500'
                             }">${s.letter}</div>
@@ -696,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div class="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-500" 
-                             style="width: ${((this.lepebesExampleStep + 1) / totalSteps) * 100}%"></div>
+                             style="width: ${((this.provarExampleStep + 1) / totalSteps) * 100}%"></div>
                     </div>
                 </div>
 
@@ -719,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
 
                     <div class="prose max-w-none">
-                        <div class="text-gray-700 leading-relaxed">${step.content}</div>
+                        <div class="text-gray-700 leading-relaxed whitespace-pre-line">${step.content}</div>
                     </div>
 
                     ${step.highlight ? `
@@ -730,30 +735,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="flex justify-between">
-                    <button id="prev-step" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors ${this.lepebesExampleStep === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
+                    <button id="prev-step" class="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors ${this.provarExampleStep === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
                         ← Anterior
                     </button>
                     
                     <span class="text-gray-600 font-semibold self-center">
-                        Passo ${this.lepebesExampleStep + 1} de ${totalSteps}
+                        Passo ${this.provarExampleStep + 1} de ${totalSteps}
                     </span>
                     
-                    <button id="next-step" class="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors ${this.lepebesExampleStep === totalSteps - 1 ? 'opacity-50 cursor-not-allowed' : ''}">
+                    <button id="next-step" class="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors ${this.provarExampleStep === totalSteps - 1 ? 'opacity-50 cursor-not-allowed' : ''}">
                         Próximo →
                     </button>
                 </div>
             `;
 
             document.getElementById('prev-step').addEventListener('click', () => {
-                if (this.lepebesExampleStep > 0) {
-                    this.lepebesExampleStep--;
+                if (this.provarExampleStep > 0) {
+                    this.provarExampleStep--;
                     this.render();
                 }
             });
 
             document.getElementById('next-step').addEventListener('click', () => {
-                if (this.lepebesExampleStep < totalSteps - 1) {
-                    this.lepebesExampleStep++;
+                if (this.provarExampleStep < totalSteps - 1) {
+                    this.provarExampleStep++;
                     this.render();
                 }
             });
@@ -764,14 +769,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="hero-gradient rounded-2xl p-8 text-white mb-8">
                     <div class="grid md:grid-cols-2 gap-8 items-center">
                         <div>
-                            <h2 class="text-4xl font-bold mb-4">I can follow all your comands...</h2>
-                            <p class="text-lg mb-6 opacity-90">Aprenda programação C de forma inteligente e estruturada com o método LEPEBES!</p>
+                            <h2 class="text-4xl font-bold mb-4">Aprenda C com o Método PROVAR!</h2>
+                            <p class="text-lg mb-6 opacity-90">Aprenda programação C de forma inteligente e estruturada com o método PROVAR!</p>
                             <div class="flex flex-wrap gap-3">
                                 <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                                     <span class="font-semibold">✨ IA personalizada</span>
                                 </div>
                                 <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
-                                    <span class="font-semibold">📚 Método LEPEBES</span>
+                                    <span class="font-semibold">📚 Método PROVAR</span>
                                 </div>
                                 <div class="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                                     <span class="font-semibold">🫗 Beba água!</span>
@@ -810,9 +815,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-800">Método LEPEBES</h3>
+                            <h3 class="text-xl font-bold text-gray-800">Método PROVAR</h3>
                         </div>
-                        <p class="text-gray-600">Estruture seu raciocínio com: <strong>Ler, Entender, Português, Estrutura, Britney, Esqueleto</strong>.</p>
+                        <p class="text-gray-600">Estruture seu raciocínio com: <strong>Problema, Requisitos, Ordenar, Verter, Analisar, Revisar</strong>.</p>
                     </div>
 
                     <div class="feature-card rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
@@ -824,7 +829,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <h3 class="text-xl font-bold text-gray-800">IA Pedagógica</h3>
                         </div>
-                        <p class="text-gray-600">Feedback que identifica o tipo de erro e sugere correções personalizadas. Oops, I will do it again.</p>
+                        <p class="text-gray-600">Feedback que identifica o tipo de erro e sugere correções personalizadas.</p>
                     </div>
 
                     <div class="feature-card rounded-xl p-6 shadow-lg border-l-4 border-green-500">
@@ -836,7 +841,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <h3 class="text-xl font-bold text-gray-800">Progresso Visual</h3>
                         </div>
-                        <p class="text-gray-600">Monitore seu progresso com estatísticas detalhadas de cada tópico. Got you on my radar...</p>
+                        <p class="text-gray-600">Monitore seu progresso com estatísticas detalhadas de cada tópico.</p>
                     </div>
                 </div>
 
@@ -868,7 +873,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="text-2xl mr-4">💻</span>
                                 <div>
                                     <div class="font-bold text-lg">Praticar</div>
-                                    <div class="text-sm opacity-90">Use o LEPEBES agora</div>
+                                    <div class="text-sm opacity-90">Use o PROVAR agora</div>
                                 </div>
                             </div>
                         </button>
@@ -876,37 +881,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">💡 Como Funciona o Método LEPEBES?</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">💡 Como Funciona o Método PROVAR?</h3>
                     <div class="grid md:grid-cols-6 gap-4">
                         <div class="text-center p-4 bg-violet-50 rounded-lg">
-                            <div class="lepees-label mx-auto mb-2">L</div>
-                            <h4 class="font-bold text-sm">Ler</h4>
-                            <p class="text-xs text-gray-600">o problema</p>
+                            <div class="provar-label mx-auto mb-2">P</div>
+                            <h4 class="font-bold text-sm">Problema</h4>
+                            <p class="text-xs text-gray-600">ler e compreender</p>
                         </div>
                         <div class="text-center p-4 bg-blue-50 rounded-lg">
-                            <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1d4ed8;">E</div>
-                            <h4 class="font-bold text-sm">Entender</h4>
-                            <p class="text-xs text-gray-600">entradas/saídas</p>
+                            <div class="provar-label mx-auto mb-2" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1d4ed8;">R</div>
+                            <h4 class="font-bold text-sm">Requisitos</h4>
+                            <p class="text-xs text-gray-600">dados e tipos</p>
                         </div>
                         <div class="text-center p-4 bg-green-50 rounded-lg">
-                            <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #166534;">P</div>
-                            <h4 class="font-bold text-sm">Português</h4>
-                            <p class="text-xs text-gray-600">pseudocódigo</p>
+                            <div class="provar-label mx-auto mb-2" style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #166534;">O</div>
+                            <h4 class="font-bold text-sm">Ordenar</h4>
+                            <p class="text-xs text-gray-600">algoritmo</p>
                         </div>
                         <div class="text-center p-4 bg-yellow-50 rounded-lg">
-                            <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e;">E</div>
-                            <h4 class="font-bold text-sm">Estrutura</h4>
-                            <p class="text-xs text-gray-600">variáveis/loops</p>
+                            <div class="provar-label mx-auto mb-2" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e;">V</div>
+                            <h4 class="font-bold text-sm">Verter</h4>
+                            <p class="text-xs text-gray-600">traduzir para C</p>
                         </div>
                         <div class="text-center p-4 bg-pink-50 rounded-lg">
-                            <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); color: #831843;">B</div>
-                            <h4 class="font-bold text-sm">Britney Spears</h4>
-                            <p class="text-xs text-gray-600">oh, baby, baby...</p>
+                            <div class="provar-label mx-auto mb-2" style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); color: #831843;">A</div>
+                            <h4 class="font-bold text-sm">Analisar</h4>
+                            <p class="text-xs text-gray-600">testar</p>
                         </div>
                         <div class="text-center p-4 bg-red-50 rounded-lg">
-                            <div class="lepees-label mx-auto mb-2" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b;">Es</div>
-                            <h4 class="font-bold text-sm">Esqueleto</h4>
-                            <p class="text-xs text-gray-600">código em C</p>
+                            <div class="provar-label mx-auto mb-2" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #991b1b;">R</div>
+                            <h4 class="font-bold text-sm">Revisar</h4>
+                            <p class="text-xs text-gray-600">corrigir</p>
                         </div>
                     </div>
                 </div>
@@ -927,7 +932,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const video = document.getElementById('hero-video');
                 if (video) {
                     video.play().catch(err => {
-                        console.log('Autoplay bloqueado. Mostrando poster da Britney.');
+                        console.log('Autoplay bloqueado.');
                     });
 
                     video.addEventListener('click', () => {
@@ -1005,14 +1010,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
 
                 <div class="bg-white border-2 border-gray-200 rounded-lg p-4 space-y-4">
-                    <h3 class="text-xl font-bold text-gray-800">Seu Planejamento (LEPEBES)</h3>
-                    <div id="lepees-fields" class="space-y-4">${this.renderLepeesFields()}</div>
+                    <h3 class="text-xl font-bold text-gray-800">Seu Planejamento (PROVAR)</h3>
+                    <div id="provar-fields" class="space-y-4">${this.renderProvarFields()}</div>
                     <button id="analyze-plan-button" class="w-full modern-button text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2">Analisar Plano</button>
                 </div>
                 
                 <div class="bg-white border-2 border-gray-200 rounded-lg p-4">
                     <label class="block font-bold text-gray-800 mb-2">💻 Seu Código C:</label>
-                    <textarea id="code-input" placeholder="Após a análise do plano, escreva seu código aqui... I need to make mistakes just to learn who I am" class="w-full h-56 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500 font-mono text-sm modern-input"></textarea>
+                    <textarea id="code-input" placeholder="Após a análise do plano, escreva seu código aqui..." class="w-full h-56 p-3 border rounded-lg focus:ring-2 focus:ring-violet-500 font-mono text-sm modern-input"></textarea>
                 </div>
                 <button id="analyze-code-button" class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-3 text-lg transition-all">Analisar Código</button>
                 
@@ -1033,22 +1038,22 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('chat-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') this.sendChatMessage(); });
         },
 
-        renderLepeesFields() {
-            return this.lepeesSteps.map(step => {
+        renderProvarFields() {
+            return this.provarSteps.map(step => {
                 if (step.type === 'checkbox') {
                     return `<div class="flex items-center gap-4">
-                                <span class="lepees-label">${step.label}</span>
+                                <span class="provar-label">${step.label}</span>
                                 <div class="w-full flex items-center bg-white p-3 rounded-lg border border-gray-200">
-                                    <input id="lepees-${step.id}" type="checkbox" class="h-5 w-5 rounded text-violet-600 focus:ring-violet-500">
-                                    <label for="lepees-${step.id}" class="ml-3 block font-bold text-gray-700">${step.title}</label>
+                                    <input id="provar-${step.id}" type="checkbox" class="h-5 w-5 rounded text-violet-600 focus:ring-violet-500">
+                                    <label for="provar-${step.id}" class="ml-3 block font-bold text-gray-700">${step.title}</label>
                                 </div>
                             </div>`;
                 } else {
                     return `<div class="flex items-start gap-4">
-                                <span class="lepees-label">${step.label}</span>
+                                <span class="provar-label">${step.label}</span>
                                 <div class="w-full">
                                     <label class="block font-bold text-gray-700 mb-1">${step.title}</label>
-                                    <textarea id="lepees-${step.id}" class="w-full h-20 p-2 border rounded-lg focus:ring-2 focus:ring-violet-500 modern-input"></textarea>
+                                    <textarea id="provar-${step.id}" class="w-full h-20 p-2 border rounded-lg focus:ring-2 focus:ring-violet-500 modern-input"></textarea>
                                 </div>
                             </div>`;
                 }
@@ -1076,7 +1081,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <!-- Header do Dashboard -->
                 <div class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-xl p-6 mb-6">
                     <h2 class="text-3xl font-bold mb-2">EM IMPLEMENTAÇÃO: Seu Progresso</h2>
-                    <p class="text-lg opacity-90">Em breve, você poderá acompanhar sua evolução no método LEPEBES com login e senha</p>
+                    <p class="text-lg opacity-90">Em breve, você poderá acompanhar sua evolução no método PROVAR com login e senha</p>
                 </div>
 
                 <!-- Cards de Estatísticas -->
@@ -1314,10 +1319,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="text-5xl mb-3 block">🧑‍💻</span>
                     <h3 class="text-2xl font-bold mb-2">Continue assim!</h3>
                     <p class="text-lg opacity-90">
-                        ${averageProgress === 0 ? 'Comece sua jornada agora! Na sua idade, Britney Spears já era a princesa do opo! 💜' : 
-                          averageProgress < 50 ? 'You want a hot body? You want a Bugatti? You want a Maserati? You better work, bitch …' :
-                          averageProgress < 100 ? 'Stronger than yesterday!' :
-                          'IT IS BRITNEY, B*TCH! Você dominou tudo! Just like a circus! 🎪'}
+                        ${averageProgress === 0 ? 'Comece sua jornada agora! Use o método PROVAR para estruturar seu raciocínio! 💜' : 
+                          averageProgress < 50 ? 'Você está progredindo! Continue praticando com o método PROVAR!' :
+                          averageProgress < 100 ? 'Excelente progresso! Você está quase lá!' :
+                          'Parabéns! Você dominou todos os tópicos! 🎉'}
                     </p>
                 </div>
             `;
@@ -1411,8 +1416,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (exerciseInput) exerciseInput.value = data.enunciado || '';
                     if (codeInput) codeInput.value = data.prototipo || '';
                     
-                    this.lepeesSteps.forEach(step => {
-                        const el = document.getElementById(`lepees-${step.id}`);
+                    this.provarSteps.forEach(step => {
+                        const el = document.getElementById(`provar-${step.id}`);
                         if (el) {
                            if (step.type === 'checkbox') el.checked = false;
                            else el.value = '';
@@ -1442,15 +1447,15 @@ document.addEventListener('DOMContentLoaded', () => {
                  return;
              }
              
-             const lepeesData = this.lepeesSteps.reduce((acc, step) => {
-                 const el = document.getElementById(`lepees-${step.id}`);
+             const provarData = this.provarSteps.reduce((acc, step) => {
+                 const el = document.getElementById(`provar-${step.id}`);
                  if (el) {
-                     acc[step.id] = (step.type === 'checkbox') ? (el.checked ? "Sim, li o problema." : "Não marquei que li o problema.") : el.value.trim();
+                     acc[step.id] = (step.type === 'checkbox') ? (el.checked ? "Sim, concluí esta etapa." : "Não marquei esta etapa.") : el.value.trim();
                  }
                  return acc;
              }, {});
 
-             const data = await this.callApi('/api/analyze-plan', { exercise, lepeesData });
+             const data = await this.callApi('/api/analyze-plan', { exercise, provarData });
              this.setLoading(button, false);
              if (data) {
                  this.renderFeedback(data.feedbackHtml, data.readyToCode ? 'green' : 'yellow');
